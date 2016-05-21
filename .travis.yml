@@ -1,0 +1,66 @@
+# Use new container infrastructure to enable caching
+sudo: false
+
+# Choose a lightweight base image; we provide our own build tools.    
+language: c
+
+# Choose a lightweight base image; we provide our own build tools.    
+language: c
+We set some environment variables here. We will get to the secure section in a bit.
+
+env:
+  global:
+  - GHC_VERSION=7.10.3
+  - secure: "Y/CkxYLpRCx4gl6qKWFO3n5zgMO8CumjLhoTO+MOS/Jcf85URRd18jVKkFg6qnIbDfNXbWQrfICV9GlD0CDOS6jBzZVNueXTWc8pQgOM2yyCWdv/kwdmDCCAu+Qx/TUXYCcVrb0C2DH+XRPMzf5o9wOtJpLx/H9Oc+n9FdXmsMo="
+  - secure: "Ojo7Tu3Ti3No7uHcIJXJbTidb7MVIRt6h/4batn1+nlVsrLh6O3gDEB7AFIpVr8Ae6nVD5VsNe7CKACnm4GoVrHgZ5fiusc4jDuzk5qTJv2hg+5wT9ftKsh5LeGssmZN8P+2pwbOTaRll8VUNvmzRPQE0SWr5jeEWcBd5Gbskrk="
+  - secure: "IG3Lw+el68HBqmm//3sMBlnfmtuQ++0fCK5tYNybddSdwFnjosdvOHuDurSBr+VvADDsRHxcnEaqz14ezSKFgFgdrecvN9saXvvIacxqzpiralLdgnPdJtSSFvMe+BvVBEZCrUNmqRVjD0I0FgNiwn8Wni8G20VDl9jGmqhK17U="
+  - secure: "Cy3fIWpY9MhHfLgvyexTZS5Aln7kYEzHUcF7QirCoScajsRbV+nhmq78q+Ds1f3IJoXuGL+9uKc5t0mNyXfBUU4sZpbps8GZt2VHEF7+Ss42rV8784aexf5RdNXNVosNQ7Z2g/8RreuOtIZMqpGaSKHUA8WSPUK48cqVYeiVvms="
+
+branches:
+  only:
+  - source
+
+cache:
+  directories:
+  - "$HOME/.stack"
+
+before_install:
+- mkdir -p ~/.local/bin
+- export PATH=$HOME/.local/bin:/opt/ghc/$GHC_VERSION/bin:$PATH
+- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+
+addons:
+  apt:
+    sources:
+    - hvr-ghc
+    packages:
+    - cabal-install-head
+    - ghc-7.10.3
+
+install:
+- stack --no-terminal build
+
+script:
+- stack --no-terminal exec site build
+
+after_script:
+- cd _site
+# Adding a CNAME file, so our custom domain works with github 
+#- echo "blog.reasoning.net" > CNAME  
+- git config --global user.email "$GH_EMAIL"
+- git config --global user.name "$GH_NAME"
+- export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
+- git init  
+- git remote add github https://${GH_USER}:${GH_TOKEN}@${REMOTE}
+- git add --all
+- git status
+- git commit -m "Built by Travis ( build $TRAVIS_BUILD_NUMBER )"
+# We don't care about commits to the master as a completely new site would be generated everytime  
+- git push github :master 2>&1 | grep -v http  
+- git push github master:master 2>&1 | grep -v http
+
+notifications:
+  email:
+    recipients:
+      - $GH_EMAIL
+    on_success: always
