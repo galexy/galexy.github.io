@@ -1,0 +1,15 @@
+* Test Heading
+
+How good do posts look like from org-mode?
+
+** Code
+#+BEGIN_SRC haskell
+main :: IO ()
+main = putStrLn greeting
+  where greeting = "dude"
+#+END_SRC
+
+** Tables
+| Field 1 | Field 2 | Field 3 |
+| Testing |       1 | 3       |
+
