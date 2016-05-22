@@ -40,7 +40,7 @@ install:
 - stack --no-terminal build
 
 script:
-- stack --no-terminal exec site build
+- stack --no-terminal exec galexy-blog build
 
 after_script:
 - cd _site
