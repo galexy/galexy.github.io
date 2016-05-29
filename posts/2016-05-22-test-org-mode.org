@@ -2,17 +2,27 @@
 title: Org Mode test
 ---
 
-* Introduction
-Here is the introduction to a blog post.
+*** This is a test
+Here is a test of the system.
 
-** Part I
-A part.
+| Foo       | Bar | Foo |
+|-----------+-----+-----|
+| Something | For | Us  |
 
 #+BEGIN_SRC sql
 -- this is a comment
 SELECT * 
 FROM transactions t
 WHERE t.transaction_id > 1
+#+END_SRC
+
+#+BEGIN_SRC R :exports both :results graphics :file images/regression_line.png
+N <- 100
+x <- 1:100
+y <- x + rnorm(N)
+
+plot(y ~ x)
+abline(lm(y ~ x))
 #+END_SRC
 
 #+BEGIN_SRC scala
