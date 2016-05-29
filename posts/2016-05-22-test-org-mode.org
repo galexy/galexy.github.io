@@ -16,6 +16,15 @@ FROM transactions t
 WHERE t.transaction_id > 1
 #+END_SRC
 
+Here is another section
+
+$$
+\begin{align}
+x&=\sqrt{b} \\
+ &=\sqrt{a}\tag{1}
+\end{align}
+$$
+
 #+BEGIN_SRC R :exports both :results graphics :file images/regression_line.png
 N <- 100
 x <- 1:100
@@ -25,8 +34,19 @@ plot(y ~ x)
 abline(lm(y ~ x))
 #+END_SRC
 
+when $x < y$ then we have an issue
+
 #+BEGIN_SRC scala
 case class Foo(i: Integer, s: String)
 
 val foo = Foo(1, "Test")
+#+END_SRC
+
+#+BEGIN_SRC python
+import re
+for test_string in ['555-1212', 'ILL-EGAL']:
+    if re.match(r'^\d{3}-\d{4}$', test_string):
+        print test_string, 'is a valid US local phone number'
+    else:
+        print test_string, 'rejected'
 #+END_SRC

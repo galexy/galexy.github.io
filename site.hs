@@ -79,9 +79,9 @@ postCtx =
 siteCtx :: Context String
 siteCtx = 
   listField "pages" postCtx (loadAll ("pages/*" .&&. hasVersion "titleLine"))  `mappend`
-  constField "site-title" "Galex's Blog"         `mappend`
-  constField "site-tagline" "Huh?"               `mappend`
-  constField "site-description" "Geek blog"      `mappend`
+  constField "site-title" "(event -> thoughts) -> Stream posts"         `mappend`
+  constField "site-tagline" "A blog really for myself"                  `mappend`
+  constField "site-description" "event -> thoughts is a blog by Galex Yen, software engineer, Director of Data Science at Remitly"    `mappend`
   defaultContext
 
 -- Run sortRecentFirst on ids, and then liftM (paginateEvery 3) into it
