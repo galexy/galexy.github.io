@@ -6,6 +6,11 @@ let inherit (nixpkgs) pkgs; in
 
     buildInputs = [
       pkgs.stack
+      pkgs.R
+      pkgs.rPackages.ggplot2
+      pkgs.rPackages.dplyr
+      pkgs.rPackages.ggthemes
+      pkgs.rPackages.tidyr
     ];
   }
 
