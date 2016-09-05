@@ -1,0 +1,20 @@
+---
+title: Strongly Typed Analysis
+---
+
+** Use good (better) tools
+
+** Don't just replicate other tools
+
+** But, learn from them
+
+** Create higher leveler abstractions
+
+It's important to distinguish between conceptual and operational solutions when
+solving a problem. Data analysts/scientist and software enginner, too often, conflate 
+these different views of a problem domain. When that happens, these two models get tangled 
+in their heads and is usually reified in their final work products, be it code or analysis.
+
+The end result clearly resembles a thinking process that can't see the forest from the
+trees. And, when these tools are reused by others, propogates a lack of clear understanding
+of the real problem.
