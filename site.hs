@@ -9,7 +9,7 @@ import           Hakyll
 --------------------------------------------------------------------------------
 main :: IO ()
 main = hakyll $ do
-    match "images/*" $ do
+    match "images/**" $ do
         route   idRoute
         compile copyFileCompiler
 
@@ -34,7 +34,7 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" siteCtx
             >>= relativizeUrls
 
-    match "posts/*" $ do
+    match "posts/*/index.*" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
             >>= saveSnapshot "content"
@@ -42,7 +42,7 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
-    blog <- buildPaginateWith grouper "posts/*"
+    blog <- buildPaginateWith grouper "posts/*/index.*"
         (\n -> if n == 1
             then "index.html"
             else fromCapture "page/*.html" (show n))
@@ -79,7 +79,7 @@ postCtx =
 siteCtx :: Context String
 siteCtx = 
   listField "pages" postCtx (loadAll ("pages/*" .&&. hasVersion "titleLine"))  `mappend`
-  constField "site-title" "(event -> thoughts) -> Stream posts"         `mappend`
+  constField "site-title" "event -> [thought] -> Stream post"         `mappend`
   constField "site-tagline" "A blog really for myself"                  `mappend`
   constField "site-description" "event -> thoughts is a blog by Galex Yen, software engineer, Director of Data Science at Remitly"    `mappend`
   defaultContext

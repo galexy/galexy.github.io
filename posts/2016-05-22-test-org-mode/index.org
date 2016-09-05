@@ -35,7 +35,7 @@ Sometimes it's interesting to see if the system behaves the way you would expect
 
 Here is some R code.
 
-#+begin_src R :exports both :results graphics :file ../images/regression_line.png
+#+begin_src R :exports both :results graphics :file ../../images/test-org-mode/regression_line.png
 N <- 100
 x <- 1:100
 y <- x + rnorm(N)
@@ -44,7 +44,7 @@ plot(y ~ x)
 abline(lm(y ~ x))
 #+end_src
 
-[[../images/regression_line.png]]
+[[/images/test-org-mode/regression_line.png]]
 
 when $x < y$ then we have an issue
 
