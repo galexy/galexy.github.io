@@ -1,0 +1,13 @@
+name: galexy-blog
+version: '0.1.0'
+synopsis: Galex Yen's blog
+author: Galex Yen
+license: BSD3
+executables:
+  galexy-blog:
+    main: site.hs
+    ghc-options:
+    - -threaded
+    dependencies:
+    - base
+    - hakyll
