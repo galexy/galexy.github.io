@@ -26,7 +26,7 @@ before_install:
 
 install:
 # Build Hakyll Site
-- stack --no-terminal --install-ghc build --only-dependencies
+- stack --no-terminal --install-ghc build
 
 script:
 # Build the site
