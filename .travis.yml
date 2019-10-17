@@ -48,3 +48,7 @@ notifications:
     recipients:
       - $GH_EMAIL
     on_success: always
+
+branches:
+  only:
+  - source
