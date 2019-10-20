@@ -1,6 +1,5 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid    (mappend)
 import           Data.Monoid    ((<>))
 import           Control.Monad  (liftM)
 import           Hakyll
@@ -78,10 +77,12 @@ postCtx =
 
 siteCtx :: Context String
 siteCtx = 
-  listField "pages" postCtx (loadAll ("pages/*" .&&. hasVersion "titleLine"))  `mappend`
-  constField "site-title" "event -> [thought] -> Stream post"         `mappend`
-  constField "site-tagline" "A blog really for myself"                  `mappend`
-  constField "site-description" "event -> thoughts is a blog by Galex Yen, software engineer, Director of Data Science at Remitly"    `mappend`
+  listField "pages" postCtx (loadAll ("pages/*" .&&. hasVersion "titleLine")) <>
+  constField "site-title" "event -> [thought] -> Stream post"                 <>
+  constField "site-tagline" "A blog really for myself"                        <>
+  constField "site-author" "Galex Yen"                                        <>
+  constField "site-copyright" "© 2019 Galex Yen"                              <>
+  constField "site-description" "event -> thoughts is a blog by Galex Yen, software engineer, Director of Data Science at Remitly" <>
   defaultContext
 
 -- Run sortRecentFirst on ids, and then liftM (paginateEvery 3) into it
