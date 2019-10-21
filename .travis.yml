@@ -30,7 +30,7 @@ install:
 
 script:
 # Build the site
-- stack --no-terminal exec -- galexy-blog build
+- stack --no-terminal exec -- site build
 
 deploy:
   provider: pages
