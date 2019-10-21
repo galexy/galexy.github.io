@@ -1,13 +1,27 @@
-name: galexy-blog
-version: '0.1.0'
-synopsis: Galex Yen's blog
-author: Galex Yen
-license: BSD3
+name:         galexy-blog
+version:      0.1.0
+author:       "Galex Yen"
+license:      BSD3
+copyright:    "2019 Galex Yen"
+
+extra-source-files:
+- README.md
+
+library:
+  source-dirs: src
+
+dependencies:
+- base
+
 executables:
-  galexy-blog:
-    main: site.hs
+  site:
+    main:         Main.hs
+    source-dirs:  app
     ghc-options:
     - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
     dependencies:
     - base
     - hakyll
+    - galexy-blog

@@ -1,47 +1,71 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!doctype html>
+<html lang="en">
+<head>
+  <title>$title$ - $site-title$</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="$if(description)$ $description$ $else$ $site-description$ $endif$" />
+  <meta name="author" content="$if(author)$ $author$ $else$ $site-author$ $endif$" />
+  <link rel="alternate" type="application/rss+xml" href="/rss.xml" />
 
-    $partial("templates/head.html")$
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <script src="https://kit.fontawesome.com/b76b73e8e8.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+  <link rel="stylesheet" type="text/css" href="/css/syntax.css" />
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
-    <body class="theme-base-0d">
+</head>
 
-      $partial("templates/sidebar.html")$
-      $partial("templates/tracking.html")$
+<body>
+  <div id="container">
+    <header>
+      <h1>
+          <a href="/">$site-title$</a>
+      </h1>
 
-      <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
-         content to avoid any CSS collisions with our real content. -->
-      <div class="wrap">
-        <div class="masthead">
-          <div class="container">
-            <h3 class="masthead-title">
-              <a href="/" title="Home">$site-title$</a>
-              <small>$site-tagline$</small>
-            </h3>
-          </div>
-        </div>
+      <ul id="social-media">
+        $if(site-author-twitter)$
+        <li><a href="https://twitter.com/$site-author-twitter$"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+        $endif$
+        $if(site-author-linkedin)$
+        <li><a href="https://www.linkedin.com/in/$site-author-linkedin$"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+        $endif$ 
+        $if(site-author-github)$
+        <li><a href="https://github.com/$site-author-github$"><i class="fab fa-github fa-lg" aria-hidden="true"></i></a></li>
+        $endif$
+        $if(site-author-gitlab)$
+        <li><a href="https://gitlab.com/$site-author-gitlab$"><i class="fab fa-gitlab fa-lg" aria-hidden="true"></i></a></li>
+        $endif$ 
+        $if(site-author-facebook)$
+        <li><a href="https://www.facebook.com/$site-author-facebook$"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+        $endif$ 
+        $if(site-author-instagram)$
+        <li><a href="https://instagram.com/$site-author-instagram$"><i class="fab fa-instagram fa-lg" aria-hidden="true"></i></a></li>
+        $endif$
+      </ul>
+      <p><em>$site-tagline$</em></p>
+    </header>
 
-        <div class="container content">
-          $body$
-        </div>
-      </div>
-
-      <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
-      <script>
-        (function(document) {
-        var toggle = document.querySelector('.sidebar-toggle');
-        var sidebar = document.querySelector('#sidebar');
-        var checkbox = document.querySelector('#sidebar-checkbox');
-        document.addEventListener('click', function(e) {
-        var target = e.target;
-        if(!checkbox.checked ||
-        sidebar.contains(target) ||
-        (target === checkbox || target === toggle)) return;
-        checkbox.checked = false;
-        }, false);
-        })(document);
-      </script>
-    </body>
+    <nav>
+      <ul>
+        <li><a href="/pages/about">About Me</a></li>
+        <li><a href="/posts">Archive</a></li>
+        <li><a href="/pages/projects">Projects</a></li>
+      </ul>
+    </nav>
+    <main>
+    $body$
+    </main>
+    <footer>
+        <h6>$site-copyright$ 
+          | Rendered by <a href="http://jaspervdj.be/hakyll/" title="Hakyll">Hakyll</a> 
+          <!-- TODO: Add subscribe link -->
+        </h6>
+    </footer>
+</div>
+<script src="/js/scripts.js""></script>
+$partial("templates/tracking.html")$
+</body>
 </html>
