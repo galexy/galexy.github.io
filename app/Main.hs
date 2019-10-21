@@ -39,9 +39,7 @@ main = hakyll $ do
 
     match "posts/*/index.*" $ do
         route $ setExtension "html"
-        compile $ do
-
-            pandocCompiler
+        compile $ pandocCompiler
                 >>= saveSnapshot "content"
                 >>= loadAndApplyTemplate "templates/post.html"      postCtxWithTags
                 >>= loadAndApplyTemplate "templates/default.html"   postCtxWithTags
@@ -59,8 +57,9 @@ main = hakyll $ do
     create ["index.html"] $ do
         route idRoute
         compile $ do
-            let homeCtx = listField "posts" teaserCtx (recentPosts 10) <> siteCtx
-
+            let postTeaserCtx = teaserCtx postCtxWithTags
+            let homeCtx = listField "posts" postTeaserCtx (recentPosts 10) <> 
+                          siteCtx
             makeItem ""
                 >>= loadAndApplyTemplate "templates/home.html"        homeCtx
                 >>= loadAndApplyTemplate "templates/default.html"     homeCtx
@@ -72,7 +71,7 @@ main = hakyll $ do
     create ["posts/index.html"] $ do
         route idRoute 
         compile $ do
-            let listCtx = listField "items" postCtx orderedPosts <> siteCtx
+            let listCtx = listField "items" postCtxWithTags orderedPosts <> siteCtx
             makeItem ""
                 >>= loadAndApplyTemplate "templates/list.html"      listCtx
                 >>= loadAndApplyTemplate "templates/default.html"   listCtx
@@ -118,9 +117,8 @@ main = hakyll $ do
     match "templates/*" $ compile templateCompiler
 
 --------------------------------------------------------------------------
-teaserCtx :: Context String
-teaserCtx = teaserField "teaser" "content" <>
-            postCtx
+teaserCtx :: Context String -> Context String
+teaserCtx = (teaserField "teaser" "content" <>)
 
 postCtx :: Context String
 postCtx =
