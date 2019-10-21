@@ -35,17 +35,23 @@ main = hakyll $ do
     create ["index.html"] $ do
         route idRoute
         compile $ do
-            let contentPattern = fromGlob "posts/*/index.*"
-            posts <- recentFirst =<< loadAllSnapshots contentPattern "content"
-            recentPosts <- return $ take 10 posts
-
-            let homeCtx = listField "posts" teaserCtx (return recentPosts) <> 
-                          siteCtx
+            let homeCtx = listField "posts" teaserCtx (recentPosts 10) <> siteCtx
 
             makeItem ""
                 >>= loadAndApplyTemplate "templates/home.html"        homeCtx
                 >>= loadAndApplyTemplate "templates/default.html"     homeCtx
                 >>= relativizeUrls
+
+--------------------------------------------------------------------------
+-- generate archive list of posts
+--
+    create ["posts/index.html"] $ do
+        route idRoute 
+        compile $ do
+            let listCtx = listField "items" postCtx orderedPosts <> siteCtx
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/list.html"      listCtx
+                >>= loadAndApplyTemplate "templates/default.html"   listCtx
 
 --------------------------------------------------------------------------
 -- compile all the templates for use in other rules
@@ -75,5 +81,10 @@ siteCtx =
   constField "site-description" "event -> thoughts is a blog by Galex Yen, software engineer, Director of Data Science at Remitly" <>
   defaultContext
 
-grouper :: MonadMetadata m => [Identifier] -> m [[Identifier]]
-grouper = fmap (paginateEvery 3) . sortRecentFirst
+orderedPosts :: Compiler [Item String]
+orderedPosts = do 
+    let contentPattern = fromGlob "posts/*/index.*"
+    recentFirst =<< loadAllSnapshots contentPattern "content"
+
+recentPosts :: Int -> Compiler [Item String]
+recentPosts n = take n <$> orderedPosts
