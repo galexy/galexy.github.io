@@ -29,6 +29,12 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html"   postCtx
             >>= relativizeUrls
 
+    match "pages/*/index.*" $ do
+        route $ setExtension "html"
+        compile $ pandocCompiler
+            >>= loadAndApplyTemplate "templates/page.html"       siteCtx
+            >>= loadAndApplyTemplate "templates/default.html"    siteCtx
+
 --------------------------------------------------------------------------
 -- generate home page with most recent 10 posts
 --
@@ -70,16 +76,16 @@ postCtx =
     siteCtx
 
 siteCtx :: Context String
-siteCtx = 
-  constField "site-title" "event -> [thought] -> Stream post"                 <>
-  constField "site-tagline" "A blog really for myself"                        <>
-  constField "site-author" "Galex Yen"                                        <>
-  constField "site-author-github" "galexy"                                    <>
-  constField "site-author-linkedin" "galexyen"                                <>
-  constField "site-copyright" "© 2019 Galex Yen"                              <>
-  constField "site-disqus-shortname" "event-list-thought-stream-post"         <>
-  constField "site-description" "event -> thoughts is a blog by Galex Yen, software engineer, Director of Data Science at Remitly" <>
-  defaultContext
+siteCtx =
+    constField "site-title" "event -> [thought] -> Stream post"               <>
+    constField "site-tagline" "A blog really for myself"                      <>
+    constField "site-author" "Galex Yen"                                      <>
+    constField "site-author-github" "galexy"                                  <>
+    constField "site-author-linkedin" "galexyen"                              <>
+    constField "site-copyright" "© 2019 Galex Yen"                            <>
+    constField "site-disqus-shortname" "event-list-thought-stream-post"       <>
+    constField "site-description" "event -> thoughts is a blog by Galex Yen, software engineer, Director of Data Science at Remitly" <>
+    defaultContext
 
 orderedPosts :: Compiler [Item String]
 orderedPosts = do 
