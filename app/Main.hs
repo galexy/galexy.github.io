@@ -1,8 +1,14 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
-import           Data.Monoid    ((<>))
-import           Control.Monad  (liftM)
-import           Hakyll
+import              Data.List           (intersperse)
+import              Data.Maybe          (fromMaybe)
+import              Data.Monoid         ((<>))
+import              Control.Applicative ((<|>))
+import              Control.Monad       (liftM)
+import              Hakyll
+import              Text.Blaze.Html     (toHtml, toValue, (!))
+import qualified    Text.Blaze.Html5              as H
+import qualified    Text.Blaze.Html5.Attributes   as A
 
 --------------------------------------------------------------------------------
 main :: IO ()
@@ -26,7 +32,10 @@ main = hakyll $ do
 -- Build tags from posts (and used by posts)
 --
     tags <- buildTags "posts/*/index.*" (fromCapture "tags/*.html")
-    postCtxWithTags <- return $ tagsField "tags" tags <> postCtx
+    categories <- buildMetaCategories "posts/*/index.*" (fromCapture "categories/*.html")
+    let postCtxWithTags = tagsField "tags" tags                       <> 
+                          metaCategoriesField "categories" categories <>
+                          postCtx
 
     match "posts/*/index.*" $ do
         route $ setExtension "html"
@@ -87,6 +96,23 @@ main = hakyll $ do
                 >>= relativizeUrls
 
 --------------------------------------------------------------------------
+-- generate category lists
+--
+    tagsRules categories $ \category pattern -> do
+        let title = "Posts in \"" ++ category ++ "\""
+        route idRoute
+        compile $ do
+            posts <- recentFirst =<< loadAll pattern
+            let ctx = constField "title" title                          <>
+                    listField "items" postCtxWithTags (return posts)  <>
+                    siteCtx
+
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/tag.html"       ctx
+                >>= loadAndApplyTemplate "templates/default.html"   ctx
+                >>= relativizeUrls
+
+--------------------------------------------------------------------------
 -- compile all the templates for use in other rules
 --
     match "templates/*" $ compile templateCompiler
@@ -121,3 +147,31 @@ orderedPosts = do
 
 recentPosts :: Int -> Compiler [Item String]
 recentPosts n = take n <$> orderedPosts
+
+buildMetaCategories :: MonadMetadata m 
+                    => Pattern 
+                    -> (String -> Identifier) 
+                    -> m Tags
+buildMetaCategories = buildTagsWith getMetaCategories
+
+getMetaCategories :: MonadMetadata m => Identifier -> m [String]
+getMetaCategories identifier = do
+    metadata <- getMetadata identifier
+    return
+        $       fromMaybe []
+        $       (lookupStringList "categories" metadata)
+        <|>     (map trim . splitAll "," <$> lookupString "categories" metadata)
+
+metaCategoriesField :: String
+                    -> Tags
+                    -> Context a
+metaCategoriesField =
+    tagsFieldWith getMetaCategories simpleRenderLink (mconcat . intersperse ", ")
+
+--------------------------------------------------------------------------------
+-- | Render one tag link
+-- Note: Duplicate from @Hakyll.Web.Tags@
+simpleRenderLink :: String -> (Maybe FilePath) -> Maybe H.Html
+simpleRenderLink _ Nothing = Nothing
+simpleRenderLink tag (Just filePath) =
+    Just $ H.a ! A.href (toValue $ toUrl filePath) $ toHtml tag

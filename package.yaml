@@ -24,4 +24,5 @@ executables:
     dependencies:
     - base
     - hakyll
+    - blaze-html
     - galexy-blog
