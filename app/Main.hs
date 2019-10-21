@@ -21,13 +21,22 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html"   siteCtx
             >>= relativizeUrls
 
+    
+--------------------------------------------------------------------------
+-- Build tags from posts (and used by posts)
+--
+    tags <- buildTags "posts/*/index.*" (fromCapture "tags/*.html")
+    postCtxWithTags <- return $ tagsField "tags" tags <> postCtx
+
     match "posts/*/index.*" $ do
         route $ setExtension "html"
-        compile $ pandocCompiler
-            >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/post.html"      postCtx
-            >>= loadAndApplyTemplate "templates/default.html"   postCtx
-            >>= relativizeUrls
+        compile $ do
+
+            pandocCompiler
+                >>= saveSnapshot "content"
+                >>= loadAndApplyTemplate "templates/post.html"      postCtxWithTags
+                >>= loadAndApplyTemplate "templates/default.html"   postCtxWithTags
+                >>= relativizeUrls
 
     match "pages/*/index.*" $ do
         route $ setExtension "html"
@@ -58,6 +67,24 @@ main = hakyll $ do
             makeItem ""
                 >>= loadAndApplyTemplate "templates/list.html"      listCtx
                 >>= loadAndApplyTemplate "templates/default.html"   listCtx
+                >>= relativizeUrls
+
+--------------------------------------------------------------------------
+-- generate tag lists
+--
+    tagsRules tags $ \tag pattern -> do
+        let title = "Posts tagged \"" ++ tag ++ "\""
+        route idRoute
+        compile $ do
+            posts <- recentFirst =<< loadAll pattern
+            let ctx = constField "title" title                          <>
+                      listField "items" postCtxWithTags (return posts)  <> 
+                      siteCtx
+
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/tag.html"       ctx
+                >>= loadAndApplyTemplate "templates/default.html"   ctx
+                >>= relativizeUrls
 
 --------------------------------------------------------------------------
 -- compile all the templates for use in other rules

@@ -161,6 +161,10 @@ time {
   box-shadow: 0 -1px 0 #bbbbbb inset;
 }
 
+#container main aside li.tags a::before {
+  content: "#";
+}
+
 #container main h1 {
   margin-bottom: 1rem;
 }
