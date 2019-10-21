@@ -29,38 +29,23 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/default.html"   postCtx
             >>= relativizeUrls
 
+--------------------------------------------------------------------------
+-- generate home page with most recent 10 posts
+--
     create ["index.html"] $ do
         route idRoute
         compile $ do
             let contentPattern = fromGlob "posts/*/index.*"
             posts <- recentFirst =<< loadAllSnapshots contentPattern "content"
-            let homeCtx = listField "posts" teaserCtx (return posts) <> siteCtx
+            recentPosts <- return $ take 10 posts
+
+            let homeCtx = listField "posts" teaserCtx (return recentPosts) <> 
+                          siteCtx
+
             makeItem ""
                 >>= loadAndApplyTemplate "templates/home.html"        homeCtx
                 >>= loadAndApplyTemplate "templates/default.html"     homeCtx
                 >>= relativizeUrls
-
-    -- blog <- buildPaginateWith grouper "posts/*/index.*"
-    --     (\n -> if n == 1
-    --         then "index.html"
-    --         else fromCapture "page/*.html" (show n))
-
-    -- paginateRules blog $ \pageNum pattern -> do
-    --     -- Copied from posts, need to refactor
-    --     route idRoute
-    --     compile $ do
-    --         posts <- recentFirst =<< loadAllSnapshots pattern "content"
-    --         let paginateCtx = paginateContext blog pageNum
-    --         let ctx         =
-    --                 constField "title" "Blog"                  <>
-    --                 listField "posts" teaserCtx (return posts) <>
-    --                 paginateCtx                                <>
-    --                 siteCtx
-
-    --         makeItem ""
-    --             >>= loadAndApplyTemplate "templates/blog.html" ctx
-    --             >>= loadAndApplyTemplate "templates/default.html" ctx
-    --             >>= relativizeUrls
 
 --------------------------------------------------------------------------
 -- compile all the templates for use in other rules
