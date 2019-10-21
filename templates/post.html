@@ -1,23 +1,8 @@
 <article>
     <h1>$title$</h1>
-    <aside>
-        <ul>
-            <li>
-                <time class="post-date" datetime="$iso$">$date$</time>
-            </li>
-            $if(category)$
-            <li>Category:<em>$category$</em></li>
-            $endif$
-            $if(tags)$
-            <li><em>$tags$</em></li>
-            $endif$
-
-            <!-- TODO: Add Reading Time -->
-        </ul>
-    </aside>
+    $partial("templates/aside.html")$
     $body$
 </article>
-
 <section class="post-nav">
     <ul>
       <!-- TODO: Add Post Navigation -->

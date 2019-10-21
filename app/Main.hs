@@ -8,31 +8,42 @@ import           Hakyll
 main :: IO ()
 main = hakyll $ do
     match "images/**" $ do
-        route   idRoute
+        route idRoute
         compile copyFileCompiler
 
     match "css/*" $ do
-        route $ idRoute
+        route idRoute
         compile $ compressCssCompiler
 
     match "404.html" $ do
-        route $ idRoute
+        route idRoute
         compile $ pandocCompiler
-            >>= loadAndApplyTemplate "templates/default.html" siteCtx
+            >>= loadAndApplyTemplate "templates/default.html"   siteCtx
             >>= relativizeUrls
 
     match "posts/*/index.*" $ do
         route $ setExtension "html"
         compile $ pandocCompiler
             >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/post.html"    postCtx
-            >>= loadAndApplyTemplate "templates/default.html" postCtx
+            >>= loadAndApplyTemplate "templates/post.html"      postCtx
+            >>= loadAndApplyTemplate "templates/default.html"   postCtx
             >>= relativizeUrls
 
-    blog <- buildPaginateWith grouper "posts/*/index.*"
-        (\n -> if n == 1
-            then "index.html"
-            else fromCapture "page/*.html" (show n))
+    create ["index.html"] $ do
+        route idRoute
+        compile $ do
+            let contentPattern = fromGlob "posts/*/index.*"
+            posts <- recentFirst =<< loadAllSnapshots contentPattern "content"
+            let homeCtx = listField "posts" teaserCtx (return posts) <> siteCtx
+            makeItem ""
+                >>= loadAndApplyTemplate "templates/home.html"        homeCtx
+                >>= loadAndApplyTemplate "templates/default.html"     homeCtx
+                >>= relativizeUrls
+
+    -- blog <- buildPaginateWith grouper "posts/*/index.*"
+    --     (\n -> if n == 1
+    --         then "index.html"
+    --         else fromCapture "page/*.html" (show n))
 
     -- paginateRules blog $ \pageNum pattern -> do
     --     -- Copied from posts, need to refactor
@@ -51,10 +62,12 @@ main = hakyll $ do
     --             >>= loadAndApplyTemplate "templates/default.html" ctx
     --             >>= relativizeUrls
 
+--------------------------------------------------------------------------
+-- compile all the templates for use in other rules
+--
     match "templates/*" $ compile templateCompiler
 
-
---------------------------------------------------------------------------------
+--------------------------------------------------------------------------
 teaserCtx :: Context String
 teaserCtx = teaserField "teaser" "content" <>
             postCtx
@@ -67,7 +80,6 @@ postCtx =
 
 siteCtx :: Context String
 siteCtx = 
-  listField "pages" postCtx (loadAll ("pages/*" .&&. hasVersion "titleLine")) <>
   constField "site-title" "event -> [thought] -> Stream post"                 <>
   constField "site-tagline" "A blog really for myself"                        <>
   constField "site-author" "Galex Yen"                                        <>
@@ -78,6 +90,5 @@ siteCtx =
   constField "site-description" "event -> thoughts is a blog by Galex Yen, software engineer, Director of Data Science at Remitly" <>
   defaultContext
 
--- Run sortRecentFirst on ids, and then liftM (paginateEvery 3) into it
 grouper :: MonadMetadata m => [Identifier] -> m [[Identifier]]
 grouper = fmap (paginateEvery 3) . sortRecentFirst

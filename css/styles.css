@@ -98,25 +98,6 @@ time {
   font-size: 1.2rem;
 }
 
-#container main section#home ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-#container main section#home ul li {
-  margin: 0.5em 0;
-  padding-bottom: 0.5em;
-}
-
-#container main section#home ul li h2 {
-  margin: 0.2em 0;
-}
-
-#container main section#home span {
-  color: #666666;
-}
-
 #container main section#list ul {
   margin: 0;
   padding: 0;
