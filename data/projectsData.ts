@@ -6,7 +6,7 @@ const projectsData = [
     for.`,
     imgSrc: '/static/images/google.png',
     href: 'https://learn.microsoft.com/en-us/archive/msdn-magazine/2012/march/microsoft-streaminsight-building-the-internet-of-things',
-  }
+  },
 ]
 
 export default projectsData
