@@ -1,12 +1,12 @@
 /** @type {import("pliny/config").PlinyConfig } */
 const siteMetadata = {
-  title: 'Galex Yen\' Blog',
+  title: 'FlatMap Blog',
   author: 'Galex Yen',
-  headerTitle: 'Self-Employed Engineer Blog',
-  description: 'Yet another tech blog',
+  headerTitle: 'flatMap :: Thought t => t -> IO Post',
+  description: 'The flatMap blog',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://galexy.github.io',
+  siteUrl: 'https://flatmap.io',
   siteRepo: 'https://github.com/galexy/galexy.github.io',
   siteLogo: '/static/images/logo.png',
   socialBanner: '/static/images/twitter-card.png',
