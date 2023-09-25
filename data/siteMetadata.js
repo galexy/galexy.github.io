@@ -2,7 +2,7 @@
 const siteMetadata = {
   title: 'FlatMap Blog',
   author: 'Galex Yen',
-  headerTitle: 'flatMap :: Thought t => t -> IO Post',
+  headerTitle: 'flatMap blog',
   description: 'The flatMap blog',
   language: 'en-us',
   theme: 'system', // system, dark or light
