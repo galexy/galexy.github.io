@@ -1,0 +1,22 @@
+---
+import TimelineItem from './TimelineItem.astro';
+import type { UnifiedContentItem } from '../lib/content';
+
+interface Props {
+  date: Date;
+  items: UnifiedContentItem[];
+}
+
+const { date, items } = Astro.props;
+---
+
+<section class="timeline-group">
+  <h2 class="date-header">
+    {date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+  </h2>
+  <div class="timeline-items">
+    {items.map(contentItem => (
+      <TimelineItem {...contentItem} />
+    ))}
+  </div>
+</section>

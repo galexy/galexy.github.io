@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TimelineGroup from '../components/TimelineGroup.astro';
+import { getAllContent, groupByDate } from '../lib/content';
+
+const allContent = await getAllContent();
+const groupedContent = groupByDate(allContent);
+
+// Convert Map to array for iteration, sorted by date descending
+const dateGroups = Array.from(groupedContent.entries())
+  .sort((a, b) => b[0].localeCompare(a[0]));
+---
+
+<BaseLayout title="Timeline">
+  <div class="timeline">
+    {dateGroups.map(([dateKey, items]) => (
+      <TimelineGroup
+        date={new Date(dateKey)}
+        items={items}
+      />
+    ))}
+  </div>
+</BaseLayout>

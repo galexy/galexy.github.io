@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TimelineItem from '../../components/TimelineItem.astro';
+import { getCollection } from 'astro:content';
+
+const snippets = (await getCollection('snippets'))
+  .filter(item => !item.data.draft)
+  .sort((a, b) => b.data.createdAt.valueOf() - a.data.createdAt.valueOf());
+---
+
+<BaseLayout title="Snippets">
+  <div class="content-listing">
+    <h1 class="listing-title">Snippets</h1>
+    {snippets.length === 0 ? (
+      <p>No snippets yet. Check back soon!</p>
+    ) : (
+      <div class="timeline-items">
+        {snippets.map((item) => (
+          <TimelineItem item={item} type="snippets" date={item.data.createdAt} />
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .listing-title {
+    position: relative;
+    color: var(--accent);
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 15px;
+    border-bottom: 3px dotted var(--accent);
+  }
+
+  .listing-title::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    display: block;
+    width: 100%;
+    border-bottom: 3px dotted var(--accent);
+  }
+
+  .timeline-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+</style>

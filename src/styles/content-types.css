@@ -1,0 +1,140 @@
+/* Minimal visual distinction - just text labels */
+.content-type {
+  display: inline-block;
+  font-size: 0.9em;
+  color: var(--accent);
+  margin-right: 0.5em;
+  font-weight: bold;
+}
+
+/* Timeline grouping */
+.timeline-group {
+  margin-bottom: 3rem;
+}
+
+.date-header {
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--accent);
+}
+
+.timeline-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.timeline-item {
+  padding-left: 1rem;
+  border-left: 2px solid var(--border);
+  padding-bottom: 1rem;
+}
+
+/* Type-specific subtle styling */
+.timeline-item[data-type="snippets"] {
+  font-style: italic;
+}
+
+.timeline-item[data-type="quotations"] blockquote {
+  margin: 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+}
+
+.timeline-item blockquote footer {
+  margin-top: 0.5rem;
+  font-size: 0.9em;
+  color: var(--accent);
+}
+
+/* Keep terminal aesthetic */
+.webmark .external-link,
+.webmark a {
+  text-decoration: none;
+  border-bottom: 1px dotted var(--accent);
+}
+
+.webmark a:hover {
+  border-bottom-style: solid;
+}
+
+/* Meta information */
+.meta {
+  margin-top: 1rem;
+  font-size: 0.9em;
+  color: color-mix(in srgb, var(--foreground) 65%, transparent);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.meta .tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.meta .tags a {
+  text-decoration: none;
+  color: var(--accent);
+  border-bottom: 1px dotted var(--accent);
+}
+
+.meta .tags a:hover {
+  border-bottom-style: solid;
+}
+
+/* Content type specific styling */
+.snippet-preview {
+  display: block;
+  text-decoration: none;
+  color: var(--foreground);
+  font-style: italic;
+}
+
+.snippet-preview:hover {
+  color: var(--accent);
+}
+
+.category {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8em;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  margin-left: 0.5rem;
+}
+
+.description {
+  margin-top: 0.5rem;
+  color: color-mix(in srgb, var(--foreground) 80%, transparent);
+}
+
+.highlights {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-left: 2px solid var(--accent);
+  padding-left: 1rem;
+}
+
+.notes {
+  margin-top: 1rem;
+}
+
+.original-description {
+  font-style: italic;
+  color: color-mix(in srgb, var(--foreground) 70%, transparent);
+}
+
+/* Content item page styles */
+.content-item h1 {
+  margin-top: 1rem;
+}
+
+.content-item .content {
+  margin-top: 1.5rem;
+  line-height: 1.6;
+}
