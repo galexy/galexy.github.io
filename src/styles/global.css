@@ -78,11 +78,45 @@ code:not(pre code) {
   border-radius: 2px;
 }
 
-pre {
+/* Code Block Container */
+.highlight {
+  position: relative;
   margin: 20px 0;
+  border: 1px solid rgba(236, 234, 229, 0.2);
+}
+
+.code-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  background: rgba(236, 234, 229, 0.05);
+  border-bottom: 1px solid rgba(236, 234, 229, 0.2);
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.copy-button {
+  padding: 3px 8px;
+  font-size: 13px;
+  border: 1px solid rgba(238, 195, 94, 0.3);
+  background: transparent;
+  color: var(--color-terminal-accent);
+  cursor: pointer;
+  transition: background 0.15s linear;
+  font-weight: normal;
+  text-transform: none;
+}
+
+.copy-button:hover {
+  background: rgba(238, 195, 94, 0.15);
+}
+
+pre {
+  margin: 0;
   padding: 15px;
   background: rgba(236, 234, 229, 0.03);
-  border: 1px solid rgba(236, 234, 229, 0.1);
   overflow-x: auto;
 }
 
