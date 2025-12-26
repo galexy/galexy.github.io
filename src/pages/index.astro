@@ -1,16 +1,41 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>My Blog</title>
-	</head>
-	<body>
-		<h1>Welcome to My Blog</h1>
-		<p>This is a vanilla Astro site. More content coming soon!</p>
-	</body>
-</html>
+<BaseLayout title="My Blog - Home" description="A terminal-inspired blog with posts, snippets, quotations, TIL, and webmarks">
+  <div class="space-y-8">
+    <section>
+      <h1 class="text-4xl font-bold mb-4 text-[var(--color-terminal-accent)]">
+        $ whoami
+      </h1>
+      <p class="text-lg opacity-90 mb-4">
+        Welcome to my terminal-inspired blog. A place for thoughts, code, and collections.
+      </p>
+      <p class="opacity-75">
+        This blog features posts, snippets, quotations, things I've learned (TIL), and webmarks—all in one unified timeline.
+      </p>
+    </section>
+
+    <section class="border-l-2 border-[var(--color-terminal-accent)] pl-4">
+      <h2 class="text-2xl font-bold mb-3 text-[var(--color-terminal-fg)]">
+        Content Types
+      </h2>
+      <ul class="space-y-2 opacity-90">
+        <li><span class="text-[var(--color-terminal-accent)]">posts</span> - Traditional long-form articles</li>
+        <li><span class="text-[var(--color-terminal-accent)]">snippets</span> - Short thoughts and quick updates</li>
+        <li><span class="text-[var(--color-terminal-accent)]">quotations</span> - Inspiring quotes and excerpts</li>
+        <li><span class="text-[var(--color-terminal-accent)]">til</span> - Today I Learned entries</li>
+        <li><span class="text-[var(--color-terminal-accent)]">webmarks</span> - Bookmarked links with commentary</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-3 text-[var(--color-terminal-fg)]">
+        Coming Soon
+      </h2>
+      <p class="opacity-75">
+        Timeline view with all content types • Tag-based navigation • RSS feed • And more...
+      </p>
+    </section>
+  </div>
+</BaseLayout>

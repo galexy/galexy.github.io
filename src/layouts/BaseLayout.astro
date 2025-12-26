@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'My Blog',
+  description = 'A terminal-inspired blog with posts, snippets, and more'
+} = Astro.props;
+
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : new URL(Astro.url.pathname, `http://localhost:4321`);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <header class="border-b border-[var(--color-terminal-fg)]/20 py-4">
+      <div class="max-w-4xl mx-auto px-4">
+        <nav class="flex items-center justify-between">
+          <a href="/" class="text-[var(--color-terminal-accent)] hover:text-[var(--color-terminal-fg)] transition-colors font-bold text-xl">
+            ~/blog
+          </a>
+          <ul class="flex gap-6 items-center">
+            <li>
+              <a href="/" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+                home
+              </a>
+            </li>
+            <li>
+              <a href="/posts" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+                posts
+              </a>
+            </li>
+            <li>
+              <a href="/tags" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+                tags
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-8">
+      <slot />
+    </main>
+
+    <footer class="border-t border-[var(--color-terminal-fg)]/20 py-6 mt-8">
+      <div class="max-w-4xl mx-auto px-4 text-center text-sm opacity-70">
+        <p>© {new Date().getFullYear()} My Blog. Built with Astro.</p>
+      </div>
+    </footer>
+  </body>
+</html>
