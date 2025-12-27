@@ -5,9 +5,10 @@ interface Props {
   description?: string;
   url: string;
   tags?: string[];
+  time?: string;
 }
 
-const { type, title, description, url, tags = [] } = Astro.props;
+const { type, title, description, url, tags = [], time } = Astro.props;
 
 const typeLabels = {
   post: 'POST',
@@ -21,8 +22,9 @@ const typeLabel = typeLabels[type];
 ---
 
 <article class="timeline-item border-l-2 border-[var(--color-terminal-fg)]/20 pl-4 py-2 hover:border-[var(--color-terminal-accent)]/50 transition-colors">
-  <div class="text-xs opacity-50 mb-1 uppercase font-bold tracking-wider">
-    {typeLabel}
+  <div class="text-xs opacity-50 mb-1 uppercase font-bold tracking-wider flex items-center gap-2">
+    <span>{typeLabel}</span>
+    {time && <span class="normal-case font-normal">@ {time}</span>}
   </div>
 
   {type === 'webmark' && title && description && (

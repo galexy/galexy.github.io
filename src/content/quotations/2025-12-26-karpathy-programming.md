@@ -1,5 +1,5 @@
 ---
-createdAt: 2026-12-26
+createdAt: 2025-12-26T14:15:00
 author: "Andrej Karpathy"
 draft: false
 source: "tweet"

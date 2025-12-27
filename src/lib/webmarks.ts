@@ -1,28 +1,19 @@
 import type { CollectionEntry } from 'astro:content';
 
 export function getWebmarkDateAndSlug(webmark: CollectionEntry<'webmarks'>) {
-  // Try to extract date from slug pattern: YYYY-MM-DD-slug
+  // Always use createdAt from frontmatter for the date (preserves time)
+  const date = new Date(webmark.data.createdAt);
+
+  // Try to extract slug from filename pattern YYYY-MM-DD-slug
   const datePattern = /^(\d{4})-(\d{2})-(\d{2})-(.+)$/;
   const match = webmark.slug.match(datePattern);
+  const slug = match ? match[4] : webmark.slug;
 
-  if (match) {
-    const [, year, month, day, slug] = match;
-    return {
-      year: parseInt(year, 10),
-      month: parseInt(month, 10),
-      day: parseInt(day, 10),
-      slug,
-      date: new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10)),
-    };
-  }
-
-  // Fallback to createdAt
-  const date = new Date(webmark.data.createdAt);
   return {
     year: date.getFullYear(),
     month: date.getMonth() + 1,
     day: date.getDate(),
-    slug: webmark.slug,
+    slug,
     date,
   };
 }

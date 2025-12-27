@@ -16,6 +16,15 @@ const quotations = await getCollection('quotations', ({ data }) => data.draft !=
 const tils = await getCollection('til', ({ data }) => data.draft !== true);
 const webmarks = await getCollection('webmarks', ({ data }) => data.draft !== true);
 
+// Format time helper
+function formatTime(date: Date): string {
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
+
 // Create unified timeline items
 type TimelineItemData = {
   type: 'post' | 'snippet' | 'quotation' | 'til' | 'webmark';
@@ -25,6 +34,7 @@ type TimelineItemData = {
   description?: string;
   tags: string[];
   content?: string;
+  time: string;
 };
 
 const allItems: TimelineItemData[] = [
@@ -37,6 +47,7 @@ const allItems: TimelineItemData[] = [
       title: post.data.title,
       description: post.data.description,
       tags: post.data.tags,
+      time: formatTime(date),
     };
   }),
   ...snippets.map((snippet) => {
@@ -47,6 +58,7 @@ const allItems: TimelineItemData[] = [
       url: getSnippetUrl(snippet),
       tags: snippet.data.tags,
       description: getSnippetPreview(snippet),
+      time: formatTime(date),
     };
   }),
   ...quotations.map((quotation) => {
@@ -57,6 +69,7 @@ const allItems: TimelineItemData[] = [
       url: getQuotationUrl(quotation),
       description: `"${getQuotationPreview(quotation)}" — ${quotation.data.author}`,
       tags: quotation.data.tags,
+      time: formatTime(date),
     };
   }),
   ...tils.map((til) => {
@@ -67,6 +80,7 @@ const allItems: TimelineItemData[] = [
       url: getTilUrl(til),
       description: getTilPreview(til),
       tags: til.data.tags,
+      time: formatTime(date),
     };
   }),
   ...webmarks.map((webmark) => {
@@ -78,6 +92,7 @@ const allItems: TimelineItemData[] = [
       title: webmark.data.title,
       description: getWebmarkPreview(webmark),
       tags: webmark.data.tags,
+      time: formatTime(date),
     };
   }),
 ];
@@ -135,6 +150,7 @@ const groupedItems = allItems.reduce((groups, item) => {
               description={item.description}
               url={item.url}
               tags={item.tags}
+              time={item.time}
             />
           ))}
         </TimelineGroup>
