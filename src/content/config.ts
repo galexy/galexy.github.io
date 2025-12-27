@@ -41,9 +41,21 @@ const til = defineCollection({
   }),
 });
 
+const webmarks = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    url: z.string(),
+    createdAt: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   posts,
   snippets,
   quotations,
   til,
+  webmarks,
 };

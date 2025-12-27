@@ -7,9 +7,10 @@ import { getPostDateAndSlug, getPostUrl } from '../../../lib/posts';
 import { getSnippetDateAndSlug, getSnippetUrl, getSnippetPreview } from '../../../lib/snippets';
 import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../../../lib/quotations';
 import { getTilDateAndSlug, getTilUrl, getTilPreview } from '../../../lib/til';
+import { getWebmarkDateAndSlug, getWebmarkUrl, getWebmarkPreview } from '../../../lib/webmarks';
 
 type TimelineItemData = {
-  type: 'post' | 'snippet' | 'quotation' | 'til';
+  type: 'post' | 'snippet' | 'quotation' | 'til' | 'webmark';
   date: Date;
   url: string;
   title?: string;
@@ -28,6 +29,7 @@ export async function getStaticPaths() {
   const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
   const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
   const tils = await getCollection('til', ({ data }) => data.draft !== true);
+  const webmarks = await getCollection('webmarks', ({ data }) => data.draft !== true);
 
   // Group items by year-month
   const monthGroups = new Map<string, TimelineItemData[]>();
@@ -106,6 +108,26 @@ export async function getStaticPaths() {
       url: getTilUrl(til),
       description: getTilPreview(til),
       tags: til.data.tags,
+    });
+  });
+
+  // Add webmarks
+  webmarks.forEach((webmark) => {
+    const { year, month } = getWebmarkDateAndSlug(webmark);
+    const yearStr = String(year);
+    const monthStr = String(month).padStart(2, '0');
+    const key = `${yearStr}-${monthStr}`;
+
+    if (!monthGroups.has(key)) {
+      monthGroups.set(key, []);
+    }
+    monthGroups.get(key)!.push({
+      type: 'webmark',
+      date: getWebmarkDateAndSlug(webmark).date,
+      url: getWebmarkUrl(webmark),
+      title: webmark.data.title,
+      description: getWebmarkPreview(webmark),
+      tags: webmark.data.tags,
     });
   });
 

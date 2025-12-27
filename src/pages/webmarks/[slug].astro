@@ -1,0 +1,66 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getWebmarkDateAndSlug } from '../../lib/webmarks';
+
+export async function getStaticPaths() {
+  const webmarks = await getCollection('webmarks', ({ data }) => data.draft !== true);
+
+  return webmarks.map((webmark) => ({
+    params: { slug: webmark.slug },
+    props: { webmark },
+  }));
+}
+
+interface Props {
+  webmark: CollectionEntry<'webmarks'>;
+}
+
+const { webmark } = Astro.props;
+const { date } = getWebmarkDateAndSlug(webmark);
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={webmark.data.title} description={`Webmark: ${webmark.data.title}`}>
+  <article>
+    <header class="mb-6">
+      <div class="text-xs uppercase tracking-wider opacity-50 mb-4">
+        <span class="font-bold">WEBMARK</span>
+        <span class="mx-2">·</span>
+        <span>{formattedDate}</span>
+      </div>
+
+      {webmark.data.tags.length > 0 && (
+        <div class="flex gap-2 flex-wrap mb-4">
+          {webmark.data.tags.map((tag) => (
+            <a
+              href={`/tags/${tag}`}
+              class="text-xs px-2 py-0.5 border border-[var(--color-terminal-accent)]/30 hover:border-[var(--color-terminal-accent)] transition-colors"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose prose-invert max-w-none">
+      <p>
+        <a
+          href={webmark.data.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-bold hover:text-[var(--color-terminal-accent)] transition-colors no-underline"
+        >
+          {webmark.data.title} ↗
+        </a>{' '}
+        {webmark.body}
+      </p>
+    </div>
+  </article>
+</BaseLayout>

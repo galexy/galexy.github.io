@@ -6,9 +6,10 @@ import TimelineItem from '../../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../../lib/posts';
 import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../../lib/quotations';
 import { getTilDateAndSlug, getTilUrl, getTilPreview } from '../../lib/til';
+import { getWebmarkDateAndSlug, getWebmarkUrl, getWebmarkPreview } from '../../lib/webmarks';
 
 type TimelineItemData = {
-  type: 'post' | 'snippet' | 'quotation' | 'til';
+  type: 'post' | 'snippet' | 'quotation' | 'til' | 'webmark';
   date: Date;
   url: string;
   title?: string;
@@ -26,6 +27,7 @@ export async function getStaticPaths() {
   const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
   const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
   const tils = await getCollection('til', ({ data }) => data.draft !== true);
+  const webmarks = await getCollection('webmarks', ({ data }) => data.draft !== true);
 
   // Collect all unique tags
   const tagGroups = new Map<string, TimelineItemData[]>();
@@ -97,6 +99,24 @@ export async function getStaticPaths() {
         url: getTilUrl(til),
         description: getTilPreview(til),
         tags: til.data.tags,
+      });
+    });
+  });
+
+  // Add webmarks to tag groups
+  webmarks.forEach((webmark) => {
+    const { date } = getWebmarkDateAndSlug(webmark);
+    webmark.data.tags.forEach((tag) => {
+      if (!tagGroups.has(tag)) {
+        tagGroups.set(tag, []);
+      }
+      tagGroups.get(tag)!.push({
+        type: 'webmark',
+        date,
+        url: getWebmarkUrl(webmark),
+        title: webmark.data.title,
+        description: getWebmarkPreview(webmark),
+        tags: webmark.data.tags,
       });
     });
   });

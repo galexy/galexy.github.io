@@ -25,7 +25,21 @@ const typeLabel = typeLabels[type];
     {typeLabel}
   </div>
 
-  {title && (
+  {type === 'webmark' && title && description && (
+    <p class="opacity-90 text-sm mb-2">
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="font-bold hover:text-[var(--color-terminal-accent)] transition-colors"
+      >
+        {title} ↗
+      </a>{' '}
+      {description}
+    </p>
+  )}
+
+  {type !== 'webmark' && title && (
     <h3 class="text-lg font-bold mb-1">
       <a
         href={url}
@@ -47,7 +61,7 @@ const typeLabel = typeLabels[type];
     </p>
   )}
 
-  {description && title && (
+  {type !== 'webmark' && description && title && (
     <p class="opacity-90 text-sm mb-2">{description}</p>
   )}
 

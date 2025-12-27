@@ -6,8 +6,9 @@ const posts = await getCollection('posts', ({ data }) => data.draft !== true);
 const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
 const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
 const tils = await getCollection('til', ({ data }) => data.draft !== true);
+const webmarks = await getCollection('webmarks', ({ data }) => data.draft !== true);
 
-// Count items per tag (posts + snippets + quotations + TILs)
+// Count items per tag (posts + snippets + quotations + TILs + webmarks)
 const tagCounts = {} as Record<string, number>;
 
 posts.forEach((post) => {
@@ -30,6 +31,12 @@ quotations.forEach((quotation) => {
 
 tils.forEach((til) => {
   til.data.tags.forEach((tag) => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  });
+});
+
+webmarks.forEach((webmark) => {
+  webmark.data.tags.forEach((tag) => {
     tagCounts[tag] = (tagCounts[tag] || 0) + 1;
   });
 });

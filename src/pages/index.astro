@@ -6,16 +6,18 @@ import TimelineItem from '../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../lib/posts';
 import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../lib/quotations';
 import { getTilDateAndSlug, getTilUrl, getTilPreview } from '../lib/til';
+import { getWebmarkDateAndSlug, getWebmarkUrl, getWebmarkPreview } from '../lib/webmarks';
 
 // Get all content
 const posts = await getCollection('posts', ({ data }) => data.draft !== true);
 const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
 const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
 const tils = await getCollection('til', ({ data }) => data.draft !== true);
+const webmarks = await getCollection('webmarks', ({ data }) => data.draft !== true);
 
 // Create unified timeline items
 type TimelineItemData = {
-  type: 'post' | 'snippet' | 'quotation' | 'til';
+  type: 'post' | 'snippet' | 'quotation' | 'til' | 'webmark';
   date: Date;
   url: string;
   title?: string;
@@ -69,6 +71,17 @@ const allItems: TimelineItemData[] = [
       tags: til.data.tags,
     };
   }),
+  ...webmarks.map((webmark) => {
+    const { date } = getWebmarkDateAndSlug(webmark);
+    return {
+      type: 'webmark' as const,
+      date,
+      url: getWebmarkUrl(webmark),
+      title: webmark.data.title,
+      description: getWebmarkPreview(webmark),
+      tags: webmark.data.tags,
+    };
+  }),
 ];
 
 // Sort by date descending
@@ -100,7 +113,7 @@ const groupedItems = allItems.reduce((groups, item) => {
         Welcome to my terminal-inspired blog. A place for thoughts, code, and collections.
       </p>
       <p class="opacity-75">
-        This blog features posts, snippets, quotations, things I've learned (TIL), and webmarks—all in one unified timeline.
+        This blog features posts, snippets, quotations, things I've learned (TIL), and bookmarked webmarks—all in one unified timeline.
       </p>
     </section>
 

@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TimelineGroup from '../../components/TimelineGroup.astro';
+import TimelineItem from '../../components/TimelineItem.astro';
+import { getWebmarkDateAndSlug, getWebmarkUrl, getWebmarkPreview } from '../../lib/webmarks';
+
+const webmarks = await getCollection('webmarks', ({ data }) => data.draft !== true);
+
+// Sort by date descending
+const sortedWebmarks = webmarks.sort((a, b) => {
+  const dateA = getWebmarkDateAndSlug(a).date;
+  const dateB = getWebmarkDateAndSlug(b).date;
+  return dateB.getTime() - dateA.getTime();
+});
+
+// Group by date
+const groupedWebmarks = sortedWebmarks.reduce((groups, webmark) => {
+  const { date } = getWebmarkDateAndSlug(webmark);
+  const dateStr = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  if (!groups[dateStr]) {
+    groups[dateStr] = [];
+  }
+  groups[dateStr].push(webmark);
+  return groups;
+}, {} as Record<string, typeof webmarks>);
+---
+
+<BaseLayout title="Webmarks" description="Bookmarked pages and resources">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
+      Webmarks
+    </h1>
+    <p class="opacity-75">
+      {webmarks.length} {webmarks.length === 1 ? 'bookmark' : 'bookmarks'}
+    </p>
+  </div>
+
+  <div class="space-y-8">
+    {Object.entries(groupedWebmarks).map(([date, dateWebmarks]) => (
+      <TimelineGroup date={date}>
+        {dateWebmarks.map((webmark) => (
+          <TimelineItem
+            type="webmark"
+            title={webmark.data.title}
+            description={getWebmarkPreview(webmark)}
+            url={getWebmarkUrl(webmark)}
+            tags={webmark.data.tags}
+          />
+        ))}
+      </TimelineGroup>
+    ))}
+
+    {webmarks.length === 0 && (
+      <p class="opacity-75 text-center py-8">
+        No webmarks yet. Check back soon!
+      </p>
+    )}
+  </div>
+</BaseLayout>
