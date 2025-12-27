@@ -1,3 +1,4 @@
+import { defineConfig } from 'astro/config';
 import { defineCollection, z } from 'astro:content';
 
 const posts = defineCollection({
@@ -59,3 +60,8 @@ export const collections = {
   til,
   webmarks,
 };
+
+export default defineConfig({
+  site: "https://flatmap.io",
+  trailingSlash: "always",
+});
