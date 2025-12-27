@@ -35,6 +35,10 @@ export function getWebmarkPreview(webmark: CollectionEntry<'webmarks'>, maxLengt
   // Remove markdown formatting and create preview
   const preview = webmark.body
     .replace(/```[\s\S]*?```/g, '[code]')
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '') // Remove images
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Convert links to text
+    .replace(/~~([^~]+)~~/g, '$1') // Remove double-tilde strikethrough
+    .replace(/~([^~]+)~/g, '$1') // Remove single-tilde strikethrough
     .replace(/[#*`]/g, '')
     .replace(/\s+/g, ' ')
     .trim();

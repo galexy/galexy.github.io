@@ -44,6 +44,10 @@ export function getQuotationUrl(quotation: CollectionEntry<'quotations'>) {
  */
 export function getQuotationPreview(quotation: CollectionEntry<'quotations'>, maxLength = 150) {
   const preview = quotation.body
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '') // Remove images
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Convert links to text
+    .replace(/~~([^~]+)~~/g, '$1') // Remove double-tilde strikethrough
+    .replace(/~([^~]+)~/g, '$1') // Remove single-tilde strikethrough
     .replace(/[#*`]/g, '')
     .replace(/\s+/g, ' ')
     .trim();

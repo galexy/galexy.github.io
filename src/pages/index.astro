@@ -5,6 +5,7 @@ import TimelineGroup from '../components/TimelineGroup.astro';
 import TimelineItem from '../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../lib/posts';
 import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../lib/quotations';
+import { getSnippetDateAndSlug, getSnippetUrl, getSnippetPreview } from '../lib/snippets';
 import { getTilDateAndSlug, getTilUrl, getTilPreview } from '../lib/til';
 import { getWebmarkDateAndSlug, getWebmarkUrl, getWebmarkPreview } from '../lib/webmarks';
 
@@ -39,16 +40,13 @@ const allItems: TimelineItemData[] = [
     };
   }),
   ...snippets.map((snippet) => {
-    // Get raw markdown body and create a simple preview
-    const preview = snippet.body.replace(/```[\s\S]*?```/g, '[code]').replace(/[#*`]/g, '').replace(/\s+/g, ' ').trim();
-    const truncated = preview.length > 150 ? preview.substring(0, 150) + '...' : preview;
-
+    const { date } = getSnippetDateAndSlug(snippet);
     return {
       type: 'snippet' as const,
-      date: new Date(snippet.data.createdAt),
-      url: `/snippets/${snippet.slug}`,
+      date,
+      url: getSnippetUrl(snippet),
       tags: snippet.data.tags,
-      description: truncated,
+      description: getSnippetPreview(snippet),
     };
   }),
   ...quotations.map((quotation) => {
@@ -117,7 +115,7 @@ const groupedItems = allItems.reduce((groups, item) => {
       agents.
       </p>
       <p class="opacity-75">
-      I'm constantly learning new things. This blog is my attempt to (learn in public)[https://www.swyx.io/learn-in-public].
+      I'm constantly learning new things. This blog is my attempt to <a href="https://www.swyx.io/learn-in-public" class="text-[var(--color-terminal-accent)] hover:underline">learn in public</a>.
       </p>
     </section>
 

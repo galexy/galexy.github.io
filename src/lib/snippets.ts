@@ -45,6 +45,10 @@ export function getSnippetUrl(snippet: CollectionEntry<'snippets'>) {
 export function getSnippetPreview(snippet: CollectionEntry<'snippets'>, maxLength = 150) {
   const preview = snippet.body
     .replace(/```[\s\S]*?```/g, '[code]')
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '') // Remove images
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // Convert links to text
+    .replace(/~~([^~]+)~~/g, '$1') // Remove double-tilde strikethrough
+    .replace(/~([^~]+)~/g, '$1') // Remove single-tilde strikethrough
     .replace(/[#*`]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
