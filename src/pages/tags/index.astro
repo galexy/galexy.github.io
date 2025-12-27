@@ -5,8 +5,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 const posts = await getCollection('posts', ({ data }) => data.draft !== true);
 const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
 const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
+const tils = await getCollection('til', ({ data }) => data.draft !== true);
 
-// Count items per tag (posts + snippets + quotations)
+// Count items per tag (posts + snippets + quotations + TILs)
 const tagCounts = {} as Record<string, number>;
 
 posts.forEach((post) => {
@@ -23,6 +24,12 @@ snippets.forEach((snippet) => {
 
 quotations.forEach((quotation) => {
   quotation.data.tags.forEach((tag) => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  });
+});
+
+tils.forEach((til) => {
+  til.data.tags.forEach((tag) => {
     tagCounts[tag] = (tagCounts[tag] || 0) + 1;
   });
 });

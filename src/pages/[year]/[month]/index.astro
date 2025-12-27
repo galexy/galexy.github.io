@@ -6,9 +6,10 @@ import TimelineItem from '../../../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../../../lib/posts';
 import { getSnippetDateAndSlug, getSnippetUrl, getSnippetPreview } from '../../../lib/snippets';
 import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../../../lib/quotations';
+import { getTilDateAndSlug, getTilUrl, getTilPreview } from '../../../lib/til';
 
 type TimelineItemData = {
-  type: 'post' | 'snippet' | 'quotation';
+  type: 'post' | 'snippet' | 'quotation' | 'til';
   date: Date;
   url: string;
   title?: string;
@@ -26,6 +27,7 @@ export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
   const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
   const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
+  const tils = await getCollection('til', ({ data }) => data.draft !== true);
 
   // Group items by year-month
   const monthGroups = new Map<string, TimelineItemData[]>();
@@ -85,6 +87,25 @@ export async function getStaticPaths() {
       url: getQuotationUrl(quotation),
       description: `"${getQuotationPreview(quotation)}" — ${quotation.data.author}`,
       tags: quotation.data.tags,
+    });
+  });
+
+  // Add TILs
+  tils.forEach((til) => {
+    const { year, month } = getTilDateAndSlug(til);
+    const yearStr = String(year);
+    const monthStr = String(month).padStart(2, '0');
+    const key = `${yearStr}-${monthStr}`;
+
+    if (!monthGroups.has(key)) {
+      monthGroups.set(key, []);
+    }
+    monthGroups.get(key)!.push({
+      type: 'til',
+      date: getTilDateAndSlug(til).date,
+      url: getTilUrl(til),
+      description: getTilPreview(til),
+      tags: til.data.tags,
     });
   });
 

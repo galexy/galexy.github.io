@@ -1,0 +1,57 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTilDateAndSlug } from '../../lib/til';
+
+interface Props {
+  til: CollectionEntry<'til'>;
+}
+
+export async function getStaticPaths() {
+  const tils = await getCollection('til', ({ data }) => {
+    return data.draft !== true;
+  });
+
+  return tils.map((til) => ({
+    params: { slug: til.slug },
+    props: { til },
+  }));
+}
+
+const { til } = Astro.props;
+const { Content } = await til.render();
+const { date } = getTilDateAndSlug(til);
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`TIL from ${formattedDate}`} description={til.body.substring(0, 150)}>
+  <article class="max-w-3xl">
+    <div class="mb-6 text-sm opacity-75">
+      <span class="uppercase font-bold tracking-wider">TIL</span>
+      <span class="mx-2">·</span>
+      <time datetime={date.toISOString()}>{formattedDate}</time>
+    </div>
+
+    {til.data.tags.length > 0 && (
+      <div class="flex gap-2 flex-wrap mb-6">
+        {til.data.tags.map((tag) => (
+          <a
+            href={`/tags/${tag}`}
+            class="text-xs px-2 py-1 border border-[var(--color-terminal-accent)]/30 hover:border-[var(--color-terminal-accent)] transition-colors"
+          >
+            #{tag}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <div class="prose prose-invert max-w-none">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

@@ -5,15 +5,17 @@ import TimelineGroup from '../components/TimelineGroup.astro';
 import TimelineItem from '../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../lib/posts';
 import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../lib/quotations';
+import { getTilDateAndSlug, getTilUrl, getTilPreview } from '../lib/til';
 
 // Get all content
 const posts = await getCollection('posts', ({ data }) => data.draft !== true);
 const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
 const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
+const tils = await getCollection('til', ({ data }) => data.draft !== true);
 
 // Create unified timeline items
 type TimelineItemData = {
-  type: 'post' | 'snippet' | 'quotation';
+  type: 'post' | 'snippet' | 'quotation' | 'til';
   date: Date;
   url: string;
   title?: string;
@@ -55,6 +57,16 @@ const allItems: TimelineItemData[] = [
       url: getQuotationUrl(quotation),
       description: `"${getQuotationPreview(quotation)}" — ${quotation.data.author}`,
       tags: quotation.data.tags,
+    };
+  }),
+  ...tils.map((til) => {
+    const { date } = getTilDateAndSlug(til);
+    return {
+      type: 'til' as const,
+      date,
+      url: getTilUrl(til),
+      description: getTilPreview(til),
+      tags: til.data.tags,
     };
   }),
 ];

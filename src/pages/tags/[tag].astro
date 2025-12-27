@@ -5,9 +5,10 @@ import TimelineGroup from '../../components/TimelineGroup.astro';
 import TimelineItem from '../../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../../lib/posts';
 import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../../lib/quotations';
+import { getTilDateAndSlug, getTilUrl, getTilPreview } from '../../lib/til';
 
 type TimelineItemData = {
-  type: 'post' | 'snippet' | 'quotation';
+  type: 'post' | 'snippet' | 'quotation' | 'til';
   date: Date;
   url: string;
   title?: string;
@@ -24,6 +25,7 @@ export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
   const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
   const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
+  const tils = await getCollection('til', ({ data }) => data.draft !== true);
 
   // Collect all unique tags
   const tagGroups = new Map<string, TimelineItemData[]>();
@@ -78,6 +80,23 @@ export async function getStaticPaths() {
         url: getQuotationUrl(quotation),
         description: `"${getQuotationPreview(quotation)}" — ${quotation.data.author}`,
         tags: quotation.data.tags,
+      });
+    });
+  });
+
+  // Add TILs to tag groups
+  tils.forEach((til) => {
+    const { date } = getTilDateAndSlug(til);
+    til.data.tags.forEach((tag) => {
+      if (!tagGroups.has(tag)) {
+        tagGroups.set(tag, []);
+      }
+      tagGroups.get(tag)!.push({
+        type: 'til',
+        date,
+        url: getTilUrl(til),
+        description: getTilPreview(til),
+        tags: til.data.tags,
       });
     });
   });

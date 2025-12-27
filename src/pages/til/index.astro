@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TimelineGroup from '../../components/TimelineGroup.astro';
+import TimelineItem from '../../components/TimelineItem.astro';
+import { getTilDateAndSlug, getTilUrl, getTilPreview } from '../../lib/til';
+
+const tils = (await getCollection('til', ({ data }) => {
+  return data.draft !== true;
+})).sort((a, b) => {
+  const aDate = getTilDateAndSlug(a).date;
+  const bDate = getTilDateAndSlug(b).date;
+  return bDate.getTime() - aDate.getTime();
+});
+
+// Group TILs by date
+const groupedTils = tils.reduce((groups, til) => {
+  const { date } = getTilDateAndSlug(til);
+  const dateStr = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  if (!groups[dateStr]) {
+    groups[dateStr] = [];
+  }
+  groups[dateStr].push(til);
+  return groups;
+}, {} as Record<string, typeof tils>);
+---
+
+<BaseLayout title="Today I Learned" description="Things I've learned">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
+      Today I Learned
+    </h1>
+    <p class="opacity-75">
+      {tils.length} {tils.length === 1 ? 'thing' : 'things'} learned
+    </p>
+  </div>
+
+  <div class="space-y-8">
+    {Object.entries(groupedTils).map(([date, dateTils]) => (
+      <TimelineGroup date={date}>
+        {dateTils.map((til) => (
+          <TimelineItem
+            type="til"
+            description={getTilPreview(til)}
+            url={getTilUrl(til)}
+            tags={til.data.tags}
+          />
+        ))}
+      </TimelineGroup>
+    ))}
+
+    {tils.length === 0 && (
+      <p class="opacity-75 text-center py-8">
+        No TILs yet. Check back soon!
+      </p>
+    )}
+  </div>
+</BaseLayout>
