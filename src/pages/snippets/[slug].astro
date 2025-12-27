@@ -1,0 +1,58 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Props {
+  snippet: CollectionEntry<'snippets'>;
+}
+
+export async function getStaticPaths() {
+  const snippets = await getCollection('snippets', ({ data }) => {
+    return data.draft !== true;
+  });
+
+  return snippets.map((snippet) => ({
+    params: { slug: snippet.slug },
+    props: { snippet },
+  }));
+}
+
+const { snippet } = Astro.props;
+const { Content } = await snippet.render();
+
+const formattedDate = new Date(snippet.data.createdAt).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`Snippet from ${formattedDate}`} description="A quick thought or code snippet">
+  <article class="snippet-content">
+    <header class="mb-6">
+      <div class="text-sm opacity-70 mb-4">
+        <span class="uppercase font-bold tracking-wider text-xs">SNIPPET</span>
+        <span class="mx-2">·</span>
+        <time datetime={snippet.data.createdAt.toISOString()}>
+          {formattedDate}
+        </time>
+      </div>
+      {snippet.data.tags.length > 0 && (
+        <div class="flex gap-2 flex-wrap">
+          {snippet.data.tags.map((tag) => (
+            <a
+              href={`/tags/${tag}`}
+              class="text-sm px-2 py-1 border border-[var(--color-terminal-accent)] hover:bg-[var(--color-terminal-accent)]/10 transition-colors"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose prose-invert max-w-none">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

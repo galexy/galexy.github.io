@@ -11,6 +11,16 @@ const posts = defineCollection({
   }),
 });
 
+const snippets = defineCollection({
+  type: 'content',
+  schema: z.object({
+    createdAt: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   posts,
+  snippets,
 };

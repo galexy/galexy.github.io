@@ -2,23 +2,29 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const posts = await getCollection('posts', ({ data }) => {
-  return data.draft !== true;
+const posts = await getCollection('posts', ({ data }) => data.draft !== true);
+const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
+
+// Count items per tag (posts + snippets)
+const tagCounts = {} as Record<string, number>;
+
+posts.forEach((post) => {
+  post.data.tags.forEach((tag) => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  });
 });
 
-// Count posts per tag
-const tagCounts = posts.reduce((counts, post) => {
-  post.data.tags.forEach((tag) => {
-    counts[tag] = (counts[tag] || 0) + 1;
+snippets.forEach((snippet) => {
+  snippet.data.tags.forEach((tag) => {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
   });
-  return counts;
-}, {} as Record<string, number>);
+});
 
 // Sort tags alphabetically
 const sortedTags = Object.entries(tagCounts).sort(([a], [b]) => a.localeCompare(b));
 ---
 
-<BaseLayout title="Tags" description="Browse posts by tag">
+<BaseLayout title="Tags" description="Browse content by tag">
   <div class="mb-8">
     <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
       Tags
@@ -37,7 +43,7 @@ const sortedTags = Object.entries(tagCounts).sort(([a], [b]) => a.localeCompare(
         >
           <span class="text-2xl font-bold">#{tag}</span>
           <span class="text-sm opacity-70">
-            {count} {count === 1 ? 'post' : 'posts'}
+            {count} {count === 1 ? 'item' : 'items'}
           </span>
         </a>
       </div>

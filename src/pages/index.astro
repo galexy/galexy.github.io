@@ -5,19 +5,54 @@ import TimelineGroup from '../components/TimelineGroup.astro';
 import TimelineItem from '../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../lib/posts';
 
-// Get all posts
-const posts = (await getCollection('posts', ({ data }) => {
-  return data.draft !== true;
-})).sort((a, b) => {
-  const aDate = getPostDateAndSlug(a).date;
-  const bDate = getPostDateAndSlug(b).date;
-  return bDate.getTime() - aDate.getTime();
-});
+// Get all content
+const posts = await getCollection('posts', ({ data }) => data.draft !== true);
+const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
 
-// Group posts by date
-const groupedPosts = posts.reduce((groups, post) => {
-  const { date } = getPostDateAndSlug(post);
-  const dateStr = date.toLocaleDateString('en-US', {
+// Create unified timeline items
+type TimelineItemData = {
+  type: 'post' | 'snippet';
+  date: Date;
+  url: string;
+  title?: string;
+  description?: string;
+  tags: string[];
+  content?: string;
+};
+
+const allItems: TimelineItemData[] = [
+  ...posts.map((post) => {
+    const { date } = getPostDateAndSlug(post);
+    return {
+      type: 'post' as const,
+      date,
+      url: getPostUrl(post),
+      title: post.data.title,
+      description: post.data.description,
+      tags: post.data.tags,
+    };
+  }),
+  ...snippets.map((snippet) => {
+    // Get raw markdown body and create a simple preview
+    const preview = snippet.body.replace(/```[\s\S]*?```/g, '[code]').replace(/[#*`]/g, '').replace(/\s+/g, ' ').trim();
+    const truncated = preview.length > 150 ? preview.substring(0, 150) + '...' : preview;
+
+    return {
+      type: 'snippet' as const,
+      date: new Date(snippet.data.createdAt),
+      url: `/snippets/${snippet.slug}`,
+      tags: snippet.data.tags,
+      description: truncated,
+    };
+  }),
+];
+
+// Sort by date descending
+allItems.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+// Group by date
+const groupedItems = allItems.reduce((groups, item) => {
+  const dateStr = item.date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
@@ -26,9 +61,9 @@ const groupedPosts = posts.reduce((groups, post) => {
   if (!groups[dateStr]) {
     groups[dateStr] = [];
   }
-  groups[dateStr].push(post);
+  groups[dateStr].push(item);
   return groups;
-}, {} as Record<string, typeof posts>);
+}, {} as Record<string, TimelineItemData[]>);
 ---
 
 <BaseLayout title="My Blog - Home" description="A terminal-inspired blog with posts, snippets, quotations, TIL, and webmarks">
@@ -52,23 +87,23 @@ const groupedPosts = posts.reduce((groups, post) => {
         Recent Activity
       </h2>
 
-      {Object.entries(groupedPosts).map(([date, datePosts]) => (
+      {Object.entries(groupedItems).map(([date, dateItems]) => (
         <TimelineGroup date={date}>
-          {datePosts.map((post) => (
+          {dateItems.map((item) => (
             <TimelineItem
-              type="post"
-              title={post.data.title}
-              description={post.data.description}
-              url={getPostUrl(post)}
-              tags={post.data.tags}
+              type={item.type}
+              title={item.title}
+              description={item.description}
+              url={item.url}
+              tags={item.tags}
             />
           ))}
         </TimelineGroup>
       ))}
 
-      {posts.length === 0 && (
+      {allItems.length === 0 && (
         <p class="opacity-75 text-center py-8">
-          No posts yet. Check back soon!
+          No content yet. Check back soon!
         </p>
       )}
     </section>

@@ -1,24 +1,34 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import TimelineGroup from '../../../components/TimelineGroup.astro';
 import TimelineItem from '../../../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../../../lib/posts';
+import { getSnippetDateAndSlug, getSnippetUrl, getSnippetPreview } from '../../../lib/snippets';
+
+type TimelineItemData = {
+  type: 'post' | 'snippet';
+  date: Date;
+  url: string;
+  title?: string;
+  description?: string;
+  tags: string[];
+};
 
 interface Props {
   year: string;
   month: string;
-  posts: CollectionEntry<'posts'>[];
+  items: TimelineItemData[];
 }
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => {
-    return data.draft !== true;
-  });
+  const posts = await getCollection('posts', ({ data }) => data.draft !== true);
+  const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
 
-  // Group posts by year-month
-  const monthGroups = new Map<string, CollectionEntry<'posts'>[]>();
+  // Group items by year-month
+  const monthGroups = new Map<string, TimelineItemData[]>();
 
+  // Add posts
   posts.forEach((post) => {
     const { year, month } = getPostDateAndSlug(post);
     const yearStr = String(year);
@@ -28,19 +38,45 @@ export async function getStaticPaths() {
     if (!monthGroups.has(key)) {
       monthGroups.set(key, []);
     }
-    monthGroups.get(key)!.push(post);
+    monthGroups.get(key)!.push({
+      type: 'post',
+      date: getPostDateAndSlug(post).date,
+      url: getPostUrl(post),
+      title: post.data.title,
+      description: post.data.description,
+      tags: post.data.tags,
+    });
   });
 
-  return Array.from(monthGroups.entries()).map(([key, monthPosts]) => {
+  // Add snippets
+  snippets.forEach((snippet) => {
+    const { year, month } = getSnippetDateAndSlug(snippet);
+    const yearStr = String(year);
+    const monthStr = String(month).padStart(2, '0');
+    const key = `${yearStr}-${monthStr}`;
+
+    if (!monthGroups.has(key)) {
+      monthGroups.set(key, []);
+    }
+    monthGroups.get(key)!.push({
+      type: 'snippet',
+      date: getSnippetDateAndSlug(snippet).date,
+      url: getSnippetUrl(snippet),
+      description: getSnippetPreview(snippet),
+      tags: snippet.data.tags,
+    });
+  });
+
+  return Array.from(monthGroups.entries()).map(([key, items]) => {
     const [year, month] = key.split('-');
     return {
       params: { year, month },
-      props: { year, month, posts: monthPosts },
+      props: { year, month, items },
     };
   });
 }
 
-const { year, month, posts } = Astro.props;
+const { year, month, items } = Astro.props;
 
 // Parse as local date to avoid timezone issues
 const formattedMonth = new Date(parseInt(year), parseInt(month) - 1, 1).toLocaleDateString('en-US', {
@@ -48,16 +84,11 @@ const formattedMonth = new Date(parseInt(year), parseInt(month) - 1, 1).toLocale
   month: 'long',
 });
 
-// Group posts by date for display
-const groupedPosts = posts
-  .sort((a, b) => {
-    const aDate = getPostDateAndSlug(a).date;
-    const bDate = getPostDateAndSlug(b).date;
-    return bDate.getTime() - aDate.getTime();
-  })
-  .reduce((groups, post) => {
-    const { date } = getPostDateAndSlug(post);
-    const dateStr = date.toLocaleDateString('en-US', {
+// Group items by date for display
+const groupedItems = items
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .reduce((groups, item) => {
+    const dateStr = item.date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
@@ -66,31 +97,31 @@ const groupedPosts = posts
     if (!groups[dateStr]) {
       groups[dateStr] = [];
     }
-    groups[dateStr].push(post);
+    groups[dateStr].push(item);
     return groups;
-  }, {} as Record<string, typeof posts>);
+  }, {} as Record<string, TimelineItemData[]>);
 ---
 
-<BaseLayout title={`Posts from ${formattedMonth}`} description={`All posts from ${formattedMonth}`}>
+<BaseLayout title={`Content from ${formattedMonth}`} description={`All content from ${formattedMonth}`}>
   <div class="mb-8">
     <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
       {formattedMonth}
     </h1>
     <p class="opacity-75">
-      {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+      {items.length} {items.length === 1 ? 'item' : 'items'}
     </p>
   </div>
 
   <div class="space-y-8">
-    {Object.entries(groupedPosts).map(([date, datePosts]) => (
+    {Object.entries(groupedItems).map(([date, dateItems]) => (
       <TimelineGroup date={date}>
-        {datePosts.map((post) => (
+        {dateItems.map((item) => (
           <TimelineItem
-            type="post"
-            title={post.data.title}
-            description={post.data.description}
-            url={getPostUrl(post)}
-            tags={post.data.tags}
+            type={item.type}
+            title={item.title}
+            description={item.description}
+            url={item.url}
+            tags={item.tags}
           />
         ))}
       </TimelineGroup>

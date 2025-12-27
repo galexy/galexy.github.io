@@ -1,23 +1,34 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import TimelineItem from '../../../../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../../../../lib/posts';
+import { getSnippetDateAndSlug, getSnippetUrl, getSnippetPreview } from '../../../../lib/snippets';
+
+type TimelineItemData = {
+  type: 'post' | 'snippet';
+  date: Date;
+  url: string;
+  title?: string;
+  description?: string;
+  tags: string[];
+};
 
 interface Props {
   year: string;
   month: string;
   day: string;
-  posts: CollectionEntry<'posts'>[];
+  items: TimelineItemData[];
 }
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => {
-    return data.draft !== true;
-  });
+  const posts = await getCollection('posts', ({ data }) => data.draft !== true);
+  const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
 
-  // Group posts by date
-  const dateGroups = new Map<string, CollectionEntry<'posts'>[]>();
+  // Group items by date
+  const dateGroups = new Map<string, TimelineItemData[]>();
 
+  // Add posts
   posts.forEach((post) => {
     const { year, month, day } = getPostDateAndSlug(post);
     const yearStr = String(year);
@@ -28,19 +39,46 @@ export async function getStaticPaths() {
     if (!dateGroups.has(key)) {
       dateGroups.set(key, []);
     }
-    dateGroups.get(key)!.push(post);
+    dateGroups.get(key)!.push({
+      type: 'post',
+      date: getPostDateAndSlug(post).date,
+      url: getPostUrl(post),
+      title: post.data.title,
+      description: post.data.description,
+      tags: post.data.tags,
+    });
   });
 
-  return Array.from(dateGroups.entries()).map(([key, datePosts]) => {
+  // Add snippets
+  snippets.forEach((snippet) => {
+    const { year, month, day } = getSnippetDateAndSlug(snippet);
+    const yearStr = String(year);
+    const monthStr = String(month).padStart(2, '0');
+    const dayStr = String(day).padStart(2, '0');
+    const key = `${yearStr}-${monthStr}-${dayStr}`;
+
+    if (!dateGroups.has(key)) {
+      dateGroups.set(key, []);
+    }
+    dateGroups.get(key)!.push({
+      type: 'snippet',
+      date: getSnippetDateAndSlug(snippet).date,
+      url: getSnippetUrl(snippet),
+      description: getSnippetPreview(snippet),
+      tags: snippet.data.tags,
+    });
+  });
+
+  return Array.from(dateGroups.entries()).map(([key, items]) => {
     const [year, month, day] = key.split('-');
     return {
       params: { year, month, day },
-      props: { year, month, day, posts: datePosts },
+      props: { year, month, day, items },
     };
   });
 }
 
-const { year, month, day, posts } = Astro.props;
+const { year, month, day, items } = Astro.props;
 
 // Parse as local date to avoid timezone issues
 const formattedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString('en-US', {
@@ -50,41 +88,25 @@ const formattedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day
 });
 ---
 
-<BaseLayout title={`Posts from ${formattedDate}`} description={`All posts from ${formattedDate}`}>
+<BaseLayout title={`Content from ${formattedDate}`} description={`All content from ${formattedDate}`}>
   <div class="mb-8">
     <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
       {formattedDate}
     </h1>
     <p class="opacity-75">
-      {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+      {items.length} {items.length === 1 ? 'item' : 'items'}
     </p>
   </div>
 
-  <div class="space-y-8">
-    {posts.map((post) => (
-      <article class="border-l-2 border-[var(--color-terminal-accent)] pl-4 py-2">
-        <h2 class="text-2xl font-bold mb-2">
-          <a
-            href={getPostUrl(post)}
-            class="hover:text-[var(--color-terminal-accent)] transition-colors"
-          >
-            {post.data.title}
-          </a>
-        </h2>
-        <p class="opacity-90 mb-3">{post.data.description}</p>
-        {post.data.tags.length > 0 && (
-          <div class="flex gap-2 flex-wrap">
-            {post.data.tags.map((tag) => (
-              <a
-                href={`/tags/${tag}`}
-                class="text-xs px-2 py-1 border border-[var(--color-terminal-accent)]/50 hover:border-[var(--color-terminal-accent)] transition-colors"
-              >
-                #{tag}
-              </a>
-            ))}
-          </div>
-        )}
-      </article>
+  <div class="space-y-4">
+    {items.map((item) => (
+      <TimelineItem
+        type={item.type}
+        title={item.title}
+        description={item.description}
+        url={item.url}
+        tags={item.tags}
+      />
     ))}
   </div>
 </BaseLayout>

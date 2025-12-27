@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TimelineGroup from '../../components/TimelineGroup.astro';
+import TimelineItem from '../../components/TimelineItem.astro';
+import { getSnippetDateAndSlug, getSnippetUrl, getSnippetPreview } from '../../lib/snippets';
+
+const snippets = (await getCollection('snippets', ({ data }) => {
+  return data.draft !== true;
+})).sort((a, b) => {
+  const aDate = getSnippetDateAndSlug(a).date;
+  const bDate = getSnippetDateAndSlug(b).date;
+  return bDate.getTime() - aDate.getTime();
+});
+
+// Group snippets by date
+const groupedSnippets = snippets.reduce((groups, snippet) => {
+  const { date } = getSnippetDateAndSlug(snippet);
+  const dateStr = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  if (!groups[dateStr]) {
+    groups[dateStr] = [];
+  }
+  groups[dateStr].push(snippet);
+  return groups;
+}, {} as Record<string, typeof snippets>);
+---
+
+<BaseLayout title="Snippets Archive" description="All code snippets">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
+      Snippets Archive
+    </h1>
+    <p class="opacity-75">
+      {snippets.length} {snippets.length === 1 ? 'snippet' : 'snippets'}
+    </p>
+  </div>
+
+  <div class="space-y-8">
+    {Object.entries(groupedSnippets).map(([date, dateSnippets]) => (
+      <TimelineGroup date={date}>
+        {dateSnippets.map((snippet) => (
+          <TimelineItem
+            type="snippet"
+            description={getSnippetPreview(snippet)}
+            url={getSnippetUrl(snippet)}
+            tags={snippet.data.tags}
+          />
+        ))}
+      </TimelineGroup>
+    ))}
+
+    {snippets.length === 0 && (
+      <p class="opacity-75 text-center py-8">
+        No snippets yet. Check back soon!
+      </p>
+    )}
+  </div>
+</BaseLayout>

@@ -36,7 +36,18 @@ const typeLabel = typeLabels[type];
     </h3>
   )}
 
-  {description && (
+  {description && !title && (
+    <p class="opacity-90 text-sm mb-2">
+      <a
+        href={url}
+        class="hover:text-[var(--color-terminal-accent)] transition-colors"
+      >
+        {description}
+      </a>
+    </p>
+  )}
+
+  {description && title && (
     <p class="opacity-90 text-sm mb-2">{description}</p>
   )}
 
