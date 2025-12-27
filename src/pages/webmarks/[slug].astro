@@ -18,6 +18,7 @@ interface Props {
 
 const { webmark } = Astro.props;
 const { date } = getWebmarkDateAndSlug(webmark);
+const { Content } = await webmark.render();
 
 const formattedDate = date.toLocaleDateString('en-US', {
   year: 'numeric',
@@ -35,6 +36,17 @@ const formattedDate = date.toLocaleDateString('en-US', {
         <span>{formattedDate}</span>
       </div>
 
+      <h1 class="text-2xl font-bold mb-4">
+        <a
+          href={webmark.data.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-[var(--color-terminal-accent)] transition-colors"
+        >
+          {webmark.data.title} ↗
+        </a>
+      </h1>
+
       {webmark.data.tags.length > 0 && (
         <div class="flex gap-2 flex-wrap mb-4">
           {webmark.data.tags.map((tag) => (
@@ -50,17 +62,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
     </header>
 
     <div class="prose prose-invert max-w-none">
-      <p>
-        <a
-          href={webmark.data.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="font-bold hover:text-[var(--color-terminal-accent)] transition-colors no-underline"
-        >
-          {webmark.data.title} ↗
-        </a>{' '}
-        {webmark.body}
-      </p>
+      <Content />
     </div>
   </article>
 </BaseLayout>
