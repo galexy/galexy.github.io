@@ -4,9 +4,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TimelineGroup from '../../components/TimelineGroup.astro';
 import TimelineItem from '../../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../../lib/posts';
+import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../../lib/quotations';
 
 type TimelineItemData = {
-  type: 'post' | 'snippet';
+  type: 'post' | 'snippet' | 'quotation';
   date: Date;
   url: string;
   title?: string;
@@ -22,6 +23,7 @@ interface Props {
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
   const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
+  const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
 
   // Collect all unique tags
   const tagGroups = new Map<string, TimelineItemData[]>();
@@ -59,6 +61,23 @@ export async function getStaticPaths() {
         url: `/snippets/${snippet.slug}`,
         description: truncated,
         tags: snippet.data.tags,
+      });
+    });
+  });
+
+  // Add quotations to tag groups
+  quotations.forEach((quotation) => {
+    const { date } = getQuotationDateAndSlug(quotation);
+    quotation.data.tags.forEach((tag) => {
+      if (!tagGroups.has(tag)) {
+        tagGroups.set(tag, []);
+      }
+      tagGroups.get(tag)!.push({
+        type: 'quotation',
+        date,
+        url: getQuotationUrl(quotation),
+        description: `"${getQuotationPreview(quotation)}" — ${quotation.data.author}`,
+        tags: quotation.data.tags,
       });
     });
   });

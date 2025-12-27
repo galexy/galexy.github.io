@@ -1,0 +1,72 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getQuotationDateAndSlug } from '../../lib/quotations';
+
+interface Props {
+  quotation: CollectionEntry<'quotations'>;
+}
+
+export async function getStaticPaths() {
+  const quotations = await getCollection('quotations', ({ data }) => {
+    return data.draft !== true;
+  });
+
+  return quotations.map((quotation) => ({
+    params: { slug: quotation.slug },
+    props: { quotation },
+  }));
+}
+
+const { quotation } = Astro.props;
+const { Content } = await quotation.render();
+const { date } = getQuotationDateAndSlug(quotation);
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`Quote from ${quotation.data.author}`} description={quotation.body.substring(0, 150)}>
+  <article class="max-w-3xl">
+    <div class="mb-6 text-sm opacity-75">
+      <span class="uppercase font-bold tracking-wider">QUOTE</span>
+      <span class="mx-2">·</span>
+      <time datetime={date.toISOString()}>{formattedDate}</time>
+    </div>
+
+    {quotation.data.tags.length > 0 && (
+      <div class="flex gap-2 flex-wrap mb-6">
+        {quotation.data.tags.map((tag) => (
+          <a
+            href={`/tags/${tag}`}
+            class="text-xs px-2 py-1 border border-[var(--color-terminal-accent)]/30 hover:border-[var(--color-terminal-accent)] transition-colors"
+          >
+            #{tag}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <blockquote class="border-l-4 border-[var(--color-terminal-accent)] pl-6 py-4 my-8 text-xl italic">
+      <Content />
+    </blockquote>
+
+    <div class="mt-6 text-right">
+      <p class="font-bold text-[var(--color-terminal-accent)]">— {quotation.data.author}</p>
+      {quotation.data.source && (
+        <p class="text-sm opacity-75 italic">
+          {quotation.data.url ? (
+            <a href={quotation.data.url} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              {quotation.data.source}
+            </a>
+          ) : (
+            quotation.data.source
+          )}
+        </p>
+      )}
+    </div>
+  </article>
+</BaseLayout>

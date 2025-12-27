@@ -4,14 +4,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import TimelineGroup from '../components/TimelineGroup.astro';
 import TimelineItem from '../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../lib/posts';
+import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../lib/quotations';
 
 // Get all content
 const posts = await getCollection('posts', ({ data }) => data.draft !== true);
 const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
+const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
 
 // Create unified timeline items
 type TimelineItemData = {
-  type: 'post' | 'snippet';
+  type: 'post' | 'snippet' | 'quotation';
   date: Date;
   url: string;
   title?: string;
@@ -43,6 +45,16 @@ const allItems: TimelineItemData[] = [
       url: `/snippets/${snippet.slug}`,
       tags: snippet.data.tags,
       description: truncated,
+    };
+  }),
+  ...quotations.map((quotation) => {
+    const { date } = getQuotationDateAndSlug(quotation);
+    return {
+      type: 'quotation' as const,
+      date,
+      url: getQuotationUrl(quotation),
+      description: `"${getQuotationPreview(quotation)}" — ${quotation.data.author}`,
+      tags: quotation.data.tags,
     };
   }),
 ];

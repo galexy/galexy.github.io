@@ -20,7 +20,20 @@ const snippets = defineCollection({
   }),
 });
 
+const quotations = defineCollection({
+  type: 'content',
+  schema: z.object({
+    author: z.string(),
+    source: z.string().optional(),
+    url: z.string().optional(),
+    createdAt: z.coerce.date(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
 export const collections = {
   posts,
   snippets,
+  quotations,
 };

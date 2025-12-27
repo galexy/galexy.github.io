@@ -5,9 +5,10 @@ import TimelineGroup from '../../components/TimelineGroup.astro';
 import TimelineItem from '../../components/TimelineItem.astro';
 import { getPostDateAndSlug, getPostUrl } from '../../lib/posts';
 import { getSnippetDateAndSlug, getSnippetUrl, getSnippetPreview } from '../../lib/snippets';
+import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../../lib/quotations';
 
 type TimelineItemData = {
-  type: 'post' | 'snippet';
+  type: 'post' | 'snippet' | 'quotation';
   date: Date;
   url: string;
   title?: string;
@@ -23,6 +24,7 @@ interface Props {
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.draft !== true);
   const snippets = await getCollection('snippets', ({ data }) => data.draft !== true);
+  const quotations = await getCollection('quotations', ({ data }) => data.draft !== true);
 
   // Group items by year
   const yearGroups = new Map<string, TimelineItemData[]>();
@@ -59,6 +61,23 @@ export async function getStaticPaths() {
       url: getSnippetUrl(snippet),
       description: getSnippetPreview(snippet),
       tags: snippet.data.tags,
+    });
+  });
+
+  // Add quotations
+  quotations.forEach((quotation) => {
+    const { year } = getQuotationDateAndSlug(quotation);
+    const yearStr = String(year);
+
+    if (!yearGroups.has(yearStr)) {
+      yearGroups.set(yearStr, []);
+    }
+    yearGroups.get(yearStr)!.push({
+      type: 'quotation',
+      date: getQuotationDateAndSlug(quotation).date,
+      url: getQuotationUrl(quotation),
+      description: `"${getQuotationPreview(quotation)}" — ${quotation.data.author}`,
+      tags: quotation.data.tags,
     });
   });
 

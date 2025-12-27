@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TimelineGroup from '../../components/TimelineGroup.astro';
+import TimelineItem from '../../components/TimelineItem.astro';
+import { getQuotationDateAndSlug, getQuotationUrl, getQuotationPreview } from '../../lib/quotations';
+
+const quotations = (await getCollection('quotations', ({ data }) => {
+  return data.draft !== true;
+})).sort((a, b) => {
+  const aDate = getQuotationDateAndSlug(a).date;
+  const bDate = getQuotationDateAndSlug(b).date;
+  return bDate.getTime() - aDate.getTime();
+});
+
+// Group quotations by date
+const groupedQuotations = quotations.reduce((groups, quotation) => {
+  const { date } = getQuotationDateAndSlug(quotation);
+  const dateStr = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  if (!groups[dateStr]) {
+    groups[dateStr] = [];
+  }
+  groups[dateStr].push(quotation);
+  return groups;
+}, {} as Record<string, typeof quotations>);
+---
+
+<BaseLayout title="Quotations" description="Memorable quotes and wisdom">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
+      Quotations
+    </h1>
+    <p class="opacity-75">
+      {quotations.length} {quotations.length === 1 ? 'quotation' : 'quotations'}
+    </p>
+  </div>
+
+  <div class="space-y-8">
+    {Object.entries(groupedQuotations).map(([date, dateQuotations]) => (
+      <TimelineGroup date={date}>
+        {dateQuotations.map((quotation) => (
+          <TimelineItem
+            type="quotation"
+            description={`"${getQuotationPreview(quotation)}" — ${quotation.data.author}`}
+            url={getQuotationUrl(quotation)}
+            tags={quotation.data.tags}
+          />
+        ))}
+      </TimelineGroup>
+    ))}
+
+    {quotations.length === 0 && (
+      <p class="opacity-75 text-center py-8">
+        No quotations yet. Check back soon!
+      </p>
+    )}
+  </div>
+</BaseLayout>
