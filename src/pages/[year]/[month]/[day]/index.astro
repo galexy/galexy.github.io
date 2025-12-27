@@ -1,0 +1,90 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getPostDateAndSlug, getPostUrl } from '../../../../lib/posts';
+
+interface Props {
+  year: string;
+  month: string;
+  day: string;
+  posts: CollectionEntry<'posts'>[];
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => {
+    return data.draft !== true;
+  });
+
+  // Group posts by date
+  const dateGroups = new Map<string, CollectionEntry<'posts'>[]>();
+
+  posts.forEach((post) => {
+    const { year, month, day } = getPostDateAndSlug(post);
+    const yearStr = String(year);
+    const monthStr = String(month).padStart(2, '0');
+    const dayStr = String(day).padStart(2, '0');
+    const key = `${yearStr}-${monthStr}-${dayStr}`;
+
+    if (!dateGroups.has(key)) {
+      dateGroups.set(key, []);
+    }
+    dateGroups.get(key)!.push(post);
+  });
+
+  return Array.from(dateGroups.entries()).map(([key, datePosts]) => {
+    const [year, month, day] = key.split('-');
+    return {
+      params: { year, month, day },
+      props: { year, month, day, posts: datePosts },
+    };
+  });
+}
+
+const { year, month, day, posts } = Astro.props;
+
+// Parse as local date to avoid timezone issues
+const formattedDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day)).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={`Posts from ${formattedDate}`} description={`All posts from ${formattedDate}`}>
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
+      {formattedDate}
+    </h1>
+    <p class="opacity-75">
+      {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+    </p>
+  </div>
+
+  <div class="space-y-8">
+    {posts.map((post) => (
+      <article class="border-l-2 border-[var(--color-terminal-accent)] pl-4 py-2">
+        <h2 class="text-2xl font-bold mb-2">
+          <a
+            href={getPostUrl(post)}
+            class="hover:text-[var(--color-terminal-accent)] transition-colors"
+          >
+            {post.data.title}
+          </a>
+        </h2>
+        <p class="opacity-90 mb-3">{post.data.description}</p>
+        {post.data.tags.length > 0 && (
+          <div class="flex gap-2 flex-wrap">
+            {post.data.tags.map((tag) => (
+              <a
+                href={`/tags/${tag}`}
+                class="text-xs px-2 py-1 border border-[var(--color-terminal-accent)]/50 hover:border-[var(--color-terminal-accent)] transition-colors"
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
+      </article>
+    ))}
+  </div>
+</BaseLayout>

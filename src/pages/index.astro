@@ -1,5 +1,34 @@
 ---
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import TimelineGroup from '../components/TimelineGroup.astro';
+import TimelineItem from '../components/TimelineItem.astro';
+import { getPostDateAndSlug, getPostUrl } from '../lib/posts';
+
+// Get all posts
+const posts = (await getCollection('posts', ({ data }) => {
+  return data.draft !== true;
+})).sort((a, b) => {
+  const aDate = getPostDateAndSlug(a).date;
+  const bDate = getPostDateAndSlug(b).date;
+  return bDate.getTime() - aDate.getTime();
+});
+
+// Group posts by date
+const groupedPosts = posts.reduce((groups, post) => {
+  const { date } = getPostDateAndSlug(post);
+  const dateStr = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  if (!groups[dateStr]) {
+    groups[dateStr] = [];
+  }
+  groups[dateStr].push(post);
+  return groups;
+}, {} as Record<string, typeof posts>);
 ---
 
 <BaseLayout title="My Blog - Home" description="A terminal-inspired blog with posts, snippets, quotations, TIL, and webmarks">
@@ -16,26 +45,32 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </p>
     </section>
 
-    <section class="border-l-2 border-[var(--color-terminal-accent)] pl-4">
-      <h2 class="text-2xl font-bold mb-3 text-[var(--color-terminal-fg)]">
-        Content Types
-      </h2>
-      <ul class="space-y-2 opacity-90">
-        <li><span class="text-[var(--color-terminal-accent)]">posts</span> - Traditional long-form articles</li>
-        <li><span class="text-[var(--color-terminal-accent)]">snippets</span> - Short thoughts and quick updates</li>
-        <li><span class="text-[var(--color-terminal-accent)]">quotations</span> - Inspiring quotes and excerpts</li>
-        <li><span class="text-[var(--color-terminal-accent)]">til</span> - Today I Learned entries</li>
-        <li><span class="text-[var(--color-terminal-accent)]">webmarks</span> - Bookmarked links with commentary</li>
-      </ul>
-    </section>
+    <hr />
 
     <section>
-      <h2 class="text-2xl font-bold mb-3 text-[var(--color-terminal-fg)]">
-        Coming Soon
+      <h2 class="text-3xl font-bold mb-6 text-[var(--color-terminal-fg)]">
+        Recent Activity
       </h2>
-      <p class="opacity-75">
-        Timeline view with all content types • Tag-based navigation • RSS feed • And more...
-      </p>
+
+      {Object.entries(groupedPosts).map(([date, datePosts]) => (
+        <TimelineGroup date={date}>
+          {datePosts.map((post) => (
+            <TimelineItem
+              type="post"
+              title={post.data.title}
+              description={post.data.description}
+              url={getPostUrl(post)}
+              tags={post.data.tags}
+            />
+          ))}
+        </TimelineGroup>
+      ))}
+
+      {posts.length === 0 && (
+        <p class="opacity-75 text-center py-8">
+          No posts yet. Check back soon!
+        </p>
+      )}
     </section>
   </div>
 </BaseLayout>

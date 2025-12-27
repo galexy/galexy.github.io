@@ -1,0 +1,99 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TimelineGroup from '../../../components/TimelineGroup.astro';
+import TimelineItem from '../../../components/TimelineItem.astro';
+import { getPostDateAndSlug, getPostUrl } from '../../../lib/posts';
+
+interface Props {
+  year: string;
+  month: string;
+  posts: CollectionEntry<'posts'>[];
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => {
+    return data.draft !== true;
+  });
+
+  // Group posts by year-month
+  const monthGroups = new Map<string, CollectionEntry<'posts'>[]>();
+
+  posts.forEach((post) => {
+    const { year, month } = getPostDateAndSlug(post);
+    const yearStr = String(year);
+    const monthStr = String(month).padStart(2, '0');
+    const key = `${yearStr}-${monthStr}`;
+
+    if (!monthGroups.has(key)) {
+      monthGroups.set(key, []);
+    }
+    monthGroups.get(key)!.push(post);
+  });
+
+  return Array.from(monthGroups.entries()).map(([key, monthPosts]) => {
+    const [year, month] = key.split('-');
+    return {
+      params: { year, month },
+      props: { year, month, posts: monthPosts },
+    };
+  });
+}
+
+const { year, month, posts } = Astro.props;
+
+// Parse as local date to avoid timezone issues
+const formattedMonth = new Date(parseInt(year), parseInt(month) - 1, 1).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+});
+
+// Group posts by date for display
+const groupedPosts = posts
+  .sort((a, b) => {
+    const aDate = getPostDateAndSlug(a).date;
+    const bDate = getPostDateAndSlug(b).date;
+    return bDate.getTime() - aDate.getTime();
+  })
+  .reduce((groups, post) => {
+    const { date } = getPostDateAndSlug(post);
+    const dateStr = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+
+    if (!groups[dateStr]) {
+      groups[dateStr] = [];
+    }
+    groups[dateStr].push(post);
+    return groups;
+  }, {} as Record<string, typeof posts>);
+---
+
+<BaseLayout title={`Posts from ${formattedMonth}`} description={`All posts from ${formattedMonth}`}>
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
+      {formattedMonth}
+    </h1>
+    <p class="opacity-75">
+      {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+    </p>
+  </div>
+
+  <div class="space-y-8">
+    {Object.entries(groupedPosts).map(([date, datePosts]) => (
+      <TimelineGroup date={date}>
+        {datePosts.map((post) => (
+          <TimelineItem
+            type="post"
+            title={post.data.title}
+            description={post.data.description}
+            url={getPostUrl(post)}
+            tags={post.data.tags}
+          />
+        ))}
+      </TimelineGroup>
+    ))}
+  </div>
+</BaseLayout>

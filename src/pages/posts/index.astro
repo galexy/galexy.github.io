@@ -1,0 +1,64 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TimelineGroup from '../../components/TimelineGroup.astro';
+import TimelineItem from '../../components/TimelineItem.astro';
+import { getPostDateAndSlug, getPostUrl } from '../../lib/posts';
+
+const posts = (await getCollection('posts', ({ data }) => {
+  return data.draft !== true;
+})).sort((a, b) => {
+  const aDate = getPostDateAndSlug(a).date;
+  const bDate = getPostDateAndSlug(b).date;
+  return bDate.getTime() - aDate.getTime();
+});
+
+// Group posts by date
+const groupedPosts = posts.reduce((groups, post) => {
+  const { date } = getPostDateAndSlug(post);
+  const dateStr = date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  if (!groups[dateStr]) {
+    groups[dateStr] = [];
+  }
+  groups[dateStr].push(post);
+  return groups;
+}, {} as Record<string, typeof posts>);
+---
+
+<BaseLayout title="Posts" description="All blog posts">
+  <div class="mb-8">
+    <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
+      Posts
+    </h1>
+    <p class="opacity-75">
+      {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+    </p>
+  </div>
+
+  <div class="space-y-8">
+    {Object.entries(groupedPosts).map(([date, datePosts]) => (
+      <TimelineGroup date={date}>
+        {datePosts.map((post) => (
+          <TimelineItem
+            type="post"
+            title={post.data.title}
+            description={post.data.description}
+            url={getPostUrl(post)}
+            tags={post.data.tags}
+          />
+        ))}
+      </TimelineGroup>
+    ))}
+
+    {posts.length === 0 && (
+      <p class="opacity-75 text-center py-8">
+        No posts yet. Check back soon!
+      </p>
+    )}
+  </div>
+</BaseLayout>

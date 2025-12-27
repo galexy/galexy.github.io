@@ -1,0 +1,16 @@
+---
+interface Props {
+  date: string;
+}
+
+const { date } = Astro.props;
+---
+
+<div class="timeline-group mb-8">
+  <h2 class="text-xl font-bold mb-4 text-[var(--color-terminal-accent)] border-b border-[var(--color-terminal-accent)]/30 pb-2">
+    {date}
+  </h2>
+  <div class="space-y-4">
+    <slot />
+  </div>
+</div>

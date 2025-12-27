@@ -1,0 +1,57 @@
+---
+interface Props {
+  type: 'post' | 'snippet' | 'quotation' | 'til' | 'webmark';
+  title?: string;
+  description?: string;
+  url: string;
+  tags?: string[];
+}
+
+const { type, title, description, url, tags = [] } = Astro.props;
+
+const typeLabels = {
+  post: 'POST',
+  snippet: 'SNIPPET',
+  quotation: 'QUOTE',
+  til: 'TIL',
+  webmark: 'WEBMARK',
+};
+
+const typeLabel = typeLabels[type];
+---
+
+<article class="timeline-item border-l-2 border-[var(--color-terminal-fg)]/20 pl-4 py-2 hover:border-[var(--color-terminal-accent)]/50 transition-colors">
+  <div class="text-xs opacity-50 mb-1 uppercase font-bold tracking-wider">
+    {typeLabel}
+  </div>
+
+  {title && (
+    <h3 class="text-lg font-bold mb-1">
+      <a
+        href={url}
+        class="hover:text-[var(--color-terminal-accent)] transition-colors"
+      >
+        {title}
+      </a>
+    </h3>
+  )}
+
+  {description && (
+    <p class="opacity-90 text-sm mb-2">{description}</p>
+  )}
+
+  <slot />
+
+  {tags.length > 0 && (
+    <div class="flex gap-2 flex-wrap mt-2">
+      {tags.map((tag) => (
+        <a
+          href={`/tags/${tag}`}
+          class="text-xs px-2 py-0.5 border border-[var(--color-terminal-accent)]/30 hover:border-[var(--color-terminal-accent)] transition-colors"
+        >
+          #{tag}
+        </a>
+      ))}
+    </div>
+  )}
+</article>

@@ -1,0 +1,70 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getPostDateAndSlug } from '../../../../lib/posts';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => {
+    return data.draft !== true;
+  });
+
+  return posts.map((post) => {
+    const { year, month, day, slug } = getPostDateAndSlug(post);
+    const monthStr = String(month).padStart(2, '0');
+    const dayStr = String(day).padStart(2, '0');
+
+    return {
+      params: {
+        year: String(year),
+        month: monthStr,
+        day: dayStr,
+        slug,
+      },
+      props: { post },
+    };
+  });
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const { date } = getPostDateAndSlug(post);
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="post-content">
+    <header class="mb-8">
+      <h1 class="text-4xl font-bold mb-2">{post.data.title}</h1>
+      <div class="text-sm opacity-70 mb-4">
+        <time datetime={post.data.createdAt.toISOString()}>
+          {formattedDate}
+        </time>
+      </div>
+      {post.data.tags.length > 0 && (
+        <div class="flex gap-2 flex-wrap">
+          {post.data.tags.map((tag) => (
+            <a
+              href={`/tags/${tag}`}
+              class="text-sm px-2 py-1 border border-[var(--color-terminal-accent)] hover:bg-[var(--color-terminal-accent)]/10 transition-colors"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose prose-invert max-w-none">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
