@@ -1,6 +1,6 @@
 ---
 createdAt: "2026-01-06T12:00"
-title: "PETG Wrapping and VFAs"
+title: "PETG Wrapping"
 tags: ["3D Printing"]
 draft: false
 ---
