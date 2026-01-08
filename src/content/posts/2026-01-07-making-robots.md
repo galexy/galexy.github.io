@@ -2,6 +2,7 @@
 title: "My start in building robots"
 createdAt: "2026-01-07T16:48"
 tags: ["learning", "3D Printing", "robots"]
+description: "Part of my series on starting to learn robotics"
 draft: true
 ---
 
