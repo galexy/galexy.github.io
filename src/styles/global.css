@@ -251,6 +251,45 @@ button:focus-visible,
   outline-offset: 2px;
 }
 
+figure {
+  margin: 25px 0;
+  text-align: center;
+}
+
+figure img {
+  max-width: 100%;
+  height: auto;
+}
+
+figcaption {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: rgba(236, 234, 229, 0.7);
+  font-style: italic;
+}
+
+/* Image alignment classes - for figure containers */
+.img-left img,
+img.img-left {
+  display: block;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.img-center img,
+img.img-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.img-right img,
+img.img-right {
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
+}
+
 ::selection {
   background: var(--color-terminal-accent);
   color: var(--color-terminal-bg);
