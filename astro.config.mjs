@@ -4,6 +4,7 @@ import remarkMath from 'remark-math';
 import remarkFigureCaption from '@microflash/remark-figure-caption';
 import rehypeKatex from 'rehype-katex';
 import rehypeObsidianImages from './src/plugins/rehype-obsidian-images.mjs';
+import rehypeYoutubeEmbed from './src/plugins/rehype-youtube-embed.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,6 +18,6 @@ export default defineConfig({
       wrap: true
     },
     remarkPlugins: [remarkMath, remarkFigureCaption],
-    rehypePlugins: [rehypeKatex, rehypeObsidianImages]
+    rehypePlugins: [rehypeKatex, rehypeObsidianImages, rehypeYoutubeEmbed]
   }
 });
