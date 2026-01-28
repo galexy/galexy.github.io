@@ -1,0 +1,8 @@
+# robots.txt for flatmap.io
+# Allow all crawlers to index all content
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://flatmap.io/sitemap-index.xml
