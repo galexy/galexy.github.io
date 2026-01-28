@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import remarkMath from 'remark-math';
 import remarkFigureCaption from '@microflash/remark-figure-caption';
@@ -9,6 +10,7 @@ import rehypeYoutubeEmbed from './src/plugins/rehype-youtube-embed.mjs';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://flatmap.io',
+  integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()]
   },
