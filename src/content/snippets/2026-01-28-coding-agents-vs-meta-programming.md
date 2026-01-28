@@ -16,10 +16,14 @@ made. This was helpful for some  of the larger features that would easily go sid
 document to reference. And, it also made clearing the context easier, because I would ask it to re-read the
 document.
 
-I found this, along with well crafted `CLAUDE.md` and skills, to be effective. I even found it to work well with
-driving the agent with github issues when I created a [CLI for OCR scanner last week](https://github.com/galexy/docbox).
-But, I really want to see if I can build a software "team" with coding agents. So, I'm going to start diving
-into meta-programming.
+I found that you need a good `CLAUDE.md`, well crafted agent skills, and a subagent for writing tests to be effective. 
+I even found it to work well just driving claude with github issues when I created a [CLI for OCR scanner last week](https://github.com/galexy/docbox). *One really important thing to making this work is having some feedback mechanism, 
+such as comprehensive tests or chrome dev tools MCP for browser interaction, so that the agent can self-correct.*
+That eliminated a great deal of manual review I was doing when I first started using claude code.
+
+But, I really want to see if we can build software "teams" with coding agents where I'm no longer reviewing the 
+code (well maybe sometimes). So, I'm going to start diving into AI meta-programming (as opposed to the 
+metaprogramming we did in Haskell, scala, ruby, C++ templates, etc).
 
 I plan to look at:
 
