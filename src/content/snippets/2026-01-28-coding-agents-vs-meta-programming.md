@@ -4,7 +4,7 @@ createdAt: "2026-01-28T11:48"
 draft: false
 ---
 
-I became pretty comfortable with pair programming with Claude Code, sometimes with up to three agents working
+While working at Thunk.AI, I became pretty comfortable with pair programming with Claude Code, sometimes with up to three agents working
 on completely separate features at the same time. My style is very similar to the scoped SDLC that Steve Jones
 [wrote](https://blog.metamirror.io/turning-claude-code-into-a-delegate-not-a-vibe-a-kick-starter-d646e73a8f0c) 
 about. I spent most of my interaction with Claude via a markdown file that we edited together along with
