@@ -42,4 +42,5 @@ they "learned" these agents would not take on larger pieces of work. And, I'm al
 only have one PR for a massive refactoring with +266K/-193K edits. That's clearly just vibe coding. Finally,
 I'm really disappointed that they didn't share any of their prompts and that the code doesn't even compile.
 
-We're obviously all learning here and the experimention is great.
+We're obviously all learning here and the experimention is great. I wonder what ["bitter lesson"](http://www.incompleteideas.net/IncIdeas/BitterLesson.html) 
+will be in this space.
