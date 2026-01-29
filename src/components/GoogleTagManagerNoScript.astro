@@ -1,0 +1,23 @@
+---
+/**
+ * Google Tag Manager - NoScript Fallback
+ *
+ * Place this component immediately after the opening <body> tag.
+ * Provides fallback tracking for users with JavaScript disabled.
+ *
+ * Uses the same PUBLIC_GTM_ID environment variable as GoogleTagManager.astro
+ */
+
+const gtmId = import.meta.env.PUBLIC_GTM_ID;
+---
+
+{gtmId && (
+  <noscript>
+    <iframe
+      src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+      height="0"
+      width="0"
+      style="display:none;visibility:hidden"
+    ></iframe>
+  </noscript>
+)}
