@@ -1,6 +1,6 @@
 ---
 title: "You can prompt Claude Code to go off distribution"
-createdAt: "206-01-28T21:29"
+createdAt: "2026-01-28T21:29"
 draft: false
 tags: ["claude"]
 ---
