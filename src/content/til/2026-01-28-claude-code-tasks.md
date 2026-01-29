@@ -15,3 +15,13 @@ and draws inspiration from [beads](https://github.com/steveyegge/beads) by Steve
 
 It's crazy to see how Anthropic is so quickly incorporating these features
 from the community.
+
+The other wild thing is that Opus is good enough to not even need the Todo
+list. This is something we also saw in Thunk throughout 2025. At the end of
+2024 a step, which is a Task in a Thunk workflow, would always first start
+off by running a "mini-plan" tool. This was akin to a CoT prompt. Experiments
+later in the year showed that it didn't seem to create any lift in terms of
+accuracy.
+
+What matters more is orchestrating the longer running process now. With
+multi-agents and agent swarms this coordination will become more important.
