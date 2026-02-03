@@ -13,7 +13,7 @@ I found it while reading through the [source code](https://github.com/glittercow
 of the [meta-prompting project Get Shit Done](https://github.com/glittercowboy/get-shit-done). In some of the commands
 and "workflows", Claude is instructed to invoke the Task tool, which spawans subagents
 to execute a nested prompt. This prevents the all the resulting context generated to execute
-that prompt from populating the current context. I knew that subagents were designed for this,
+that prompt from polluting the current context. I knew that subagents were designed for this,
 but previously I thought that the only way that a subagent was spawned was if claude code
 decided that the subagent was most appriorate based on its description or via a skill
 that had a forked context. 
