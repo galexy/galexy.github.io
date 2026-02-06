@@ -1,5 +1,6 @@
 ---
 title: "Broadcasting in the blind"
+description: "Getting to the hive mind starts with transparency and losing the ego"
 createdAt: "2026-02-06T11:31"
 tags: ["engineering"]
 draft: false
