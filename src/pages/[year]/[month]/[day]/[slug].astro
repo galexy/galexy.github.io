@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Comments from '../../../../components/Comments.astro';
 import { getPostDateAndSlug } from '../../../../lib/posts';
 
 interface Props {
@@ -67,4 +68,5 @@ const formattedDate = date.toLocaleDateString('en-US', {
       <Content />
     </div>
   </article>
+  <Comments />
 </BaseLayout>

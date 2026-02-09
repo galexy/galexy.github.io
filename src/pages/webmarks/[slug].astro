@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 import { getWebmarkDateAndSlug } from '../../lib/webmarks';
 
 export async function getStaticPaths() {
@@ -65,4 +66,5 @@ const formattedDate = date.toLocaleDateString('en-US', {
       <Content />
     </div>
   </article>
+  <Comments />
 </BaseLayout>

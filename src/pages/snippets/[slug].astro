@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Comments from '../../components/Comments.astro';
 
 interface Props {
   snippet: CollectionEntry<'snippets'>;
@@ -55,4 +56,5 @@ const formattedDate = new Date(snippet.data.createdAt).toLocaleDateString('en-US
       <Content />
     </div>
   </article>
+  <Comments />
 </BaseLayout>
