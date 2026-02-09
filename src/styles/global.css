@@ -125,6 +125,20 @@ pre code {
   border: none;
   padding: 0;
   font-size: 0.9em;
+  counter-reset: line;
+}
+
+pre code .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 2.5em;
+  margin-right: 1em;
+  padding-right: 0.5em;
+  text-align: right;
+  color: rgba(236, 234, 229, 0.3);
+  border-right: 1px solid rgba(236, 234, 229, 0.1);
+  user-select: none;
 }
 
 blockquote {
