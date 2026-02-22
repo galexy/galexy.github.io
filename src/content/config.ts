@@ -1,4 +1,3 @@
-import { defineConfig } from 'astro/config';
 import { defineCollection, z } from 'astro:content';
 
 const posts = defineCollection({
@@ -15,6 +14,7 @@ const posts = defineCollection({
 const snippets = defineCollection({
   type: 'content',
   schema: z.object({
+    title: z.string().nullish(),
     createdAt: z.coerce.date(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
@@ -24,6 +24,7 @@ const snippets = defineCollection({
 const quotations = defineCollection({
   type: 'content',
   schema: z.object({
+    title: z.string().nullish(),
     author: z.string(),
     source: z.string().optional(),
     url: z.string().optional(),
@@ -36,6 +37,8 @@ const quotations = defineCollection({
 const til = defineCollection({
   type: 'content',
   schema: z.object({
+    title: z.string().nullish(),
+    url: z.string().optional(),
     createdAt: z.coerce.date(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
@@ -60,8 +63,3 @@ export const collections = {
   til,
   webmarks,
 };
-
-export default defineConfig({
-  site: "https://flatmap.io",
-  trailingSlash: "always",
-});
