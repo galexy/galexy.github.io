@@ -74,6 +74,7 @@ collections:
     folder: src/content/til
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{createdAt}} - {{title}}"
     extension: md
     format: yaml-frontmatter
     fields:
@@ -91,6 +92,7 @@ collections:
     folder: src/content/webmarks
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{createdAt}} - {{title}}"
     extension: md
     format: yaml-frontmatter
     fields:
