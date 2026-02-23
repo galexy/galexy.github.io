@@ -1,5 +1,5 @@
 ---
-title: My second attempt at building the ARCTOS robot
+title: ARCTOS Robot Round 2
 description: A short account of my second and final attempt at building my first 6 DOF robotic arm
 createdAt: 2026-02-22T10:23
 tags:
