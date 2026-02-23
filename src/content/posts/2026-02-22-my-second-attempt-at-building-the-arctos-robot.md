@@ -81,17 +81,19 @@ The funny thing is that a few days later, a couple of grad students hit the same
 
 # Just work already
 
-I finished putting all the remaining gears together, but left the clamp off. I just wanted to see if I could actually control the arm from the software. In the time that I was away from working on the robot, the developer of the robot had moved away from open sourcing the software. Instead, he moved to a subscription model. I had already thrown in the towel at that point. But, seriously, what the fuck? 
+I finished putting all the remaining gears together, but left the clamp off. I just wanted to see if I could actually control the arm from the software. In the time that I was away from working on the robot, the developer of the robot had moved away from open sourcing the software. Instead, he moved to a subscription model. I had already thrown in the towel at that point. But, seriously, what the fuck?
 
 Thankfully, there a free version that had really stripped down functionality. Basically you could calibrate and move the robot. Fuck it, I'm not paying for anything else.
 
 After a lot of guessing and trial and error, I was able to partially calibrate the robot and got the X, Y, Z and A axis to mostly work. B and C were just impossible due to slippage in the belt.
 
+![It moves](https://youtube.com/shorts/HBoLBBPU1zE?feature=share)
+
 # Moving on
 
 I'm glad that's all behind me now. I'm moving onto other robotics platforms. Playing with ARCTOS had it ups and downs... mostly downs. I don't think the developer of ARCTOS realizes how frustrating his product is. I paid with real money and time to build this and it was honestly just .... frustrating.
 
-The product lacks cohesive documentation that points out assembly gotchas. But, rather the developer relies on discord discussions to document these issues. People repeatedly answer the same questions over and over again. The developer lacks operational mechanisms for addressing feedback and updating the product and documentation. 
+The product lacks cohesive documentation that points out assembly gotchas. But, rather the developer relies on discord discussions to document these issues. People repeatedly answer the same questions over and over again. The developer lacks operational mechanisms for addressing feedback and updating the product and documentation.
 
 In my career, seen the results of software engineering teams that don't have a learning and continuously improving mindset, that don't design for serviceability, maintainability, ease of deployment and operations (such as lack of observability). What you get is a shitty product experience.
 
