@@ -9,6 +9,8 @@ import { visit } from 'unist-util-visit';
  *   - https://youtube.com/watch?v=VIDEO_ID
  *   - https://youtu.be/VIDEO_ID
  *   - https://www.youtube.com/embed/VIDEO_ID
+ *   - https://youtube.com/shorts/VIDEO_ID
+ *   - https://www.youtube.com/shorts/VIDEO_ID
  */
 export default function rehypeYoutubeEmbed() {
   return (tree) => {
@@ -18,9 +20,10 @@ export default function rehypeYoutubeEmbed() {
       const src = node.properties?.src;
       if (!src) return;
 
-      const videoId = extractYoutubeId(src);
-      if (!videoId) return;
+      const result = extractYoutubeId(src);
+      if (!result) return;
 
+      const { id: videoId, isShort } = result;
       const title = node.properties?.alt || 'YouTube video';
 
       // Create the iframe element
@@ -38,12 +41,12 @@ export default function rehypeYoutubeEmbed() {
         children: [],
       };
 
-      // Wrap in a responsive container
+      // Wrap in a responsive container (shorts use vertical aspect ratio)
       const wrapper = {
         type: 'element',
         tagName: 'div',
         properties: {
-          className: ['video-embed'],
+          className: isShort ? ['video-embed', 'video-embed-short'] : ['video-embed'],
         },
         children: [iframe],
       };
@@ -73,17 +76,22 @@ function extractYoutubeId(url) {
     if (hostname === 'youtube.com') {
       // Handle /watch?v=ID format
       if (parsed.pathname === '/watch') {
-        return parsed.searchParams.get('v');
+        const id = parsed.searchParams.get('v');
+        return id ? { id, isShort: false } : null;
       }
       // Handle /embed/ID format
       if (parsed.pathname.startsWith('/embed/')) {
-        return parsed.pathname.split('/embed/')[1];
+        return { id: parsed.pathname.split('/embed/')[1], isShort: false };
+      }
+      // Handle /shorts/ID format
+      if (parsed.pathname.startsWith('/shorts/')) {
+        return { id: parsed.pathname.split('/shorts/')[1], isShort: true };
       }
     }
 
     if (hostname === 'youtu.be') {
       // Handle youtu.be/ID format
-      return parsed.pathname.slice(1);
+      return { id: parsed.pathname.slice(1), isShort: false };
     }
 
     return null;
