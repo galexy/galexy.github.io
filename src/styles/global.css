@@ -323,8 +323,9 @@ img.img-right {
 
 /* YouTube Shorts (9:16 vertical aspect ratio) */
 .video-embed.video-embed-short {
-  padding-bottom: 177.78%; /* 9:16 aspect ratio */
   max-width: 360px;
+  padding-bottom: 0;
+  aspect-ratio: 9 / 16;
 }
 
 ::selection {
