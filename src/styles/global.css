@@ -321,6 +321,12 @@ img.img-right {
   border: 1px solid rgba(236, 234, 229, 0.2);
 }
 
+/* YouTube Shorts (9:16 vertical aspect ratio) */
+.video-embed.video-embed-short {
+  padding-bottom: 177.78%; /* 9:16 aspect ratio */
+  max-width: 360px;
+}
+
 ::selection {
   background: var(--color-terminal-accent);
   color: var(--color-terminal-bg);
