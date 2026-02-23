@@ -18,9 +18,11 @@ export default function rehypeYoutubeEmbed() {
       if (node.tagName !== 'img') return;
 
       const src = node.properties?.src;
+      console.log(`[youtube-embed] Found img: src=${src}, alt=${node.properties?.alt}, parent=${parent?.tagName}, index=${index}`);
       if (!src) return;
 
       const result = extractYoutubeId(src);
+      console.log(`[youtube-embed] extractYoutubeId("${src}") =>`, JSON.stringify(result));
       if (!result) return;
 
       const { id: videoId, isShort } = result;
