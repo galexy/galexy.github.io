@@ -20,9 +20,8 @@ I wanted a way evaluate these each framework consistently. So, I decided to buil
 
 ## Some Constraints
 
-- Develop the solution without having to manually write any of the code
-- Only minimally review the generated code
-- Provide only requirements, constraints, and architectural guidance
+- No manual write code
+- Try to only provide requirements and constraints in whatever form the framework prefers
 
 ## My Evaluation Criteria
 
@@ -34,11 +33,11 @@ My evaluation would roughly consistent of:
 - Did I feel that the framework materially accelerated my productivity over vanilla Claude Code?
 - Could the framework help me scale by and help me manage multiple agents running in parallel?
 
-Separately, I would spend some time looking at the framework's code in the hopes that I could learn patterns for how to program Claude Code myself and whether I thought prompts and workflows were effective. This is very **_subjective_**. But, a year spent building a no-code and natural language only AI Agent workflow system for enterprises and actually building solutions for real customers taught me that there are real patterns for "programming" natural language agents. And, that there are **_good_** and \*\*_bad _\*\*ways to do it.
+Separately, I would spend some time looking at the framework's code in the hopes that I could learn patterns for how to program Claude Code myself and whether I thought prompts and workflows were effective. This is very **_subjective_**. But, a year spent building a no-code and natural language only AI Agent workflow system for enterprises and actually building solutions for real customers taught me that there are real patterns for "programming" natural language agents. And, that there are **_good_** and **_bad _**ways to do it.
 
 And, broadly, what did I generally like or dislike about the framework?
 
-# My first experiment
+# How does GSD work?
 
 The first framework I would test was [Get Shit Done](https://github.com/gsd-build/get-shit-done).
 
@@ -57,6 +56,10 @@ In general, it didn't.
 ### What did I think of the process?
 
 It's too linear, relies too much on human verification and doesn't seem designed to accommodate change in priorities, ideas and issues easily.
+
+Hits the issues with using Markdown for issue / work item tracking that Beads solves. Specifically, not automatically updating the backlog.
+
+The planning and summary documents that are generated are very noisy (loads of code) and require getting use to finding where important information is. There is a lot of cognitive load to the review.
 
 ### Do I feel more productive?
 
