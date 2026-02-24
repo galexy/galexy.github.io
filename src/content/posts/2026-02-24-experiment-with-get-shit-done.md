@@ -12,11 +12,11 @@ I few weeks ago, I realized that "programming" coding agents has become probably
 
 There is obviously so much to learn. Where should one start? I'm already very comfortable pair programming with Claude Code, working with CLAUDE.md files and event creating simple custom slash commands. But, there are subagents, teams, tasks, skills just in CC proper. And, there are the tools like beads and toolkits like SuperClaude, and orchestration frameworks like claude-flow and Get Shit Done.
 
-I could approach it from the bottoms up. But, I decided try some of the more _complete_ frameworks, see what the experience developing with them was like, and take a look at their code to learn how Claude Code features were being used in the wild. My guess was that I would end up back at the bottom after going through this exercise, because I suspected learning to use these frameworks was akin to learning jQuery in the early days of Web 2.0. Useful, because you get some high-level reps. But, ultimately it still too early of a framework to define how we would all eventually work.
+I could approach it from the bottoms up. But, I decided to try some of the more _complete_ frameworks and to see what the experience developing with them was like. I also wanted to learn from their code to learn how Claude Code features were being used in the wild. My guess was that I would end up back at the bottom after going through this exercise, because I suspected learning to use these frameworks was akin to learning jQuery in the early days of Web 2.0. Useful, because you get some high-level reps. But, ultimately it still too early of a framework to define how we would all eventually work.
 
 # Defining the experiment
 
-I wanted a way evaluate these each framework consistently. So, I decided to build the same application from a green field repo. I choose to build a very stripped down version of a Quicken clone that would have a python backend and a react frontend. I didn't need to completely build the product. But, I wanted the framework to have the context that I was building a medium size production application. My goal was to form a **_subjective_** opinion on how effective the framework was at helping me build develop the product. 
+I wanted a way evaluate these each framework consistently. So, I decided to build the same application from a green field repo. I choose to build a very stripped down version of a Quicken clone that would have a python backend and a react frontend. I didn't need to completely build the product. But, I wanted the framework to have the context that I was building a medium size production application. My goal was to form a **_subjective_** opinion on how effective the framework was at helping me build develop the product.
 
 ## Some Constraints
 
@@ -24,7 +24,7 @@ I wanted a way evaluate these each framework consistently. So, I decided to buil
 - Only minimally review the generated code
 - Provide only requirements, constraints, and architectural guidance
 
-## My Evaluation Criteria 
+## My Evaluation Criteria
 
 My evaluation was roughly consistent of:
 
