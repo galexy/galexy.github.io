@@ -1,7 +1,7 @@
 ---
 title: Experiment with Get Shit Done
 description: What I liked and didn't like about the GSD meta-prompting framework
-createdAt: 2026-02-23T16:29
+createdAt: 2026-02-23T17:21
 tags:
   - Claude Code
   - coding-agent
@@ -64,6 +64,6 @@ No, the linear nature and lack of parallelism makes it feel no faster than worki
 
 ### What did I like? What did I dislike?
 
-Q/A style during discussion of a phase to help flesh out more detailed thinking. 
+Q/A style during discussion of a phase to help flesh out more detailed thinking.
 
 # Conclusion
