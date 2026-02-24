@@ -23,26 +23,35 @@ I wanted a way evaluate these each framework consistently. So, I decided to buil
 - Develop the solution without having to manually write any of the code
 - Only minimally review the generated code
 - Provide only requirements, constraints, and architectural guidance
-- 
 
 ## My Evaluation Criteria
 
-My evaluation was roughly consistent of:
+My evaluation would roughly consistent of:
 
 - Did I feel like the coding agent was generally building good solution given reasonable requirements, constraints and test specifications?
-- Did I feel like the coding agent was generally doing a good job of fixing issues on its own as it was developing and would only consider its work complete after getting a solution that worked on the happy path? I didn't expect it to do a good job of finding edge cases?
-- Was the workflow smooth and did it make iteration easy? Iteration includes both working through features from some backlog, but also maintaining and updating that backlog as the product progressed and ideas and/or issues arose.
+- Did I the framework help keep the agent on track? Did the framework generally help ensure that the agent would at least get a working or almost working solution for the happy path? I didn't expect it to do a good job of finding edge cases.
+- What did I think of the process, does it help with developing a product iteratively and support experimentation necessary for the messiness of real product development? Iteration includes both working through features from some backlog, but also maintaining and updating that backlog as the product progressed and ideas and/or issues arose.
 - Did I feel that the framework materially accelerated my productivity over vanilla Claude Code?
 - Could the framework help me scale by and help me manage multiple agents running in parallel?
 
-Separately, I would spend some time looking at the framework's code in the hopes that I could learn patterns for how to program Claude Code myself and whether I thought prompts and workflows were effective. This is very **_subjective_**. But, a year spent building a no-code and natural language only AI Agent workflow system for enterprises and actually building solutions for real customers taught me that there are real patterns for "programming" natural language agents. And, that there is _good _and _bad _ways to do it.
+Separately, I would spend some time looking at the framework's code in the hopes that I could learn patterns for how to program Claude Code myself and whether I thought prompts and workflows were effective. This is very **_subjective_**. But, a year spent building a no-code and natural language only AI Agent workflow system for enterprises and actually building solutions for real customers taught me that there are real patterns for "programming" natural language agents. And, that there are **_good_** and **_bad _**ways to do it.
 
-# My first experiment - Get Shit Done
+And, broadly, what did I generally like or dislike about the framework?
 
-The first framework I would test was [Get Shit Done](https://github.com/gsd-build/get-shit-done). 
+# My first experiment
+
+The first framework I would test was [Get Shit Done](https://github.com/gsd-build/get-shit-done).
 
 # Evaluating Get Shit Done
 
-# 
+### Could I develop effectively by only providing requirements and constraints?
 
-# Takeaways
+### Did the framework help keep the agent on track?
+
+### What did I think of the process?
+
+### Do I feel more productive?
+
+### What did I like? What did I dislike?
+
+# Conclusion
