@@ -34,7 +34,7 @@ My evaluation would roughly consistent of:
 - Did I feel that the framework materially accelerated my productivity over vanilla Claude Code?
 - Could the framework help me scale by and help me manage multiple agents running in parallel?
 
-Separately, I would spend some time looking at the framework's code in the hopes that I could learn patterns for how to program Claude Code myself and whether I thought prompts and workflows were effective. This is very **_subjective_**. But, a year spent building a no-code and natural language only AI Agent workflow system for enterprises and actually building solutions for real customers taught me that there are real patterns for "programming" natural language agents. And, that there are **_good_** and **_bad _**ways to do it.
+Separately, I would spend some time looking at the framework's code in the hopes that I could learn patterns for how to program Claude Code myself and whether I thought prompts and workflows were effective. This is very **_subjective_**. But, a year spent building a no-code and natural language only AI Agent workflow system for enterprises and actually building solutions for real customers taught me that there are real patterns for "programming" natural language agents. And, that there are **_good_** and \*\*_bad _\*\*ways to do it.
 
 And, broadly, what did I generally like or dislike about the framework?
 
@@ -44,14 +44,26 @@ The first framework I would test was [Get Shit Done](https://github.com/gsd-buil
 
 # Evaluating Get Shit Done
 
+So how did GSD fair on each of my evaluation criteria that I listed above?
+
 ### Could I develop effectively by only providing requirements and constraints?
+
+Partially
 
 ### Did the framework help keep the agent on track?
 
+In general, it didn't.
+
 ### What did I think of the process?
+
+It's too linear, relies too much on human verification and doesn't seem designed to accommodate change in priorities, ideas and issues easily.
 
 ### Do I feel more productive?
 
+No, the linear nature and lack of parallelism makes it feel no faster than working with Claude Code directly.
+
 ### What did I like? What did I dislike?
+
+Q/A style during discussion of a phase to help flesh out more detailed thinking. 
 
 # Conclusion
