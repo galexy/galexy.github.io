@@ -7,13 +7,22 @@ document.addEventListener("DOMContentLoaded", () => {
     pre.parentNode?.insertBefore(wrapper, pre);
     wrapper.appendChild(pre);
 
-    // Get language from data attribute
+    // Get language and optional filename from data attributes
     const language = pre.getAttribute("data-language") || "text";
+    const title = pre.getAttribute("data-title");
 
-    // Create title bar with language label
+    // Create title bar with filename or language label
     const titleBar = document.createElement("div");
     titleBar.className = "code-title";
-    titleBar.textContent = language;
+
+    const labelSpan = document.createElement("span");
+    if (title) {
+      labelSpan.textContent = title;
+      labelSpan.title = language;
+    } else {
+      labelSpan.textContent = language;
+    }
+    titleBar.appendChild(labelSpan);
 
     // Add copy button if clipboard API is available
     if (navigator.clipboard) {
