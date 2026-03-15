@@ -127,6 +127,56 @@ pre code {
   font-size: 0.9em;
 }
 
+/* Shiki transformer: diff notation */
+pre .line.diff.add {
+  background-color: rgba(46, 160, 67, 0.2);
+}
+
+pre .line.diff.add::before {
+  content: "+";
+  position: absolute;
+  left: 4px;
+  color: #3fb950;
+}
+
+pre .line.diff.remove {
+  background-color: rgba(248, 81, 73, 0.2);
+}
+
+pre .line.diff.remove::before {
+  content: "-";
+  position: absolute;
+  left: 4px;
+  color: #f85149;
+}
+
+pre .line.diff {
+  position: relative;
+  padding-left: 20px;
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-right: 15px;
+}
+
+/* Shiki transformer: line highlight */
+pre .line.highlighted {
+  background-color: rgba(238, 195, 94, 0.12);
+  margin-left: -15px;
+  margin-right: -15px;
+  padding-left: 13px;
+  padding-right: 15px;
+  border-left: 2px solid var(--color-terminal-accent);
+}
+
+/* Shiki transformer: word highlight */
+pre .highlighted-word {
+  background-color: rgba(238, 195, 94, 0.25);
+  border: 1px solid rgba(238, 195, 94, 0.4);
+  border-radius: 2px;
+  padding: 1px 3px;
+  margin: -1px -3px;
+}
+
 /* Line numbers gutter */
 .code-wrapper {
   display: flex;
