@@ -2,6 +2,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import Comments from '../../../../components/Comments.astro';
+import TableOfContents from '../../../../components/TableOfContents.astro';
 import { getPostDateAndSlug } from '../../../../lib/posts';
 
 interface Props {
@@ -31,7 +32,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await post.render();
+const { Content, headings } = await post.render();
 
 const { date } = getPostDateAndSlug(post);
 const formattedDate = date.toLocaleDateString('en-US', {
@@ -42,31 +43,86 @@ const formattedDate = date.toLocaleDateString('en-US', {
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="post-content">
-    <header class="mb-8">
-      <h1 class="text-4xl font-bold mb-2">{post.data.title}</h1>
-      <div class="text-sm opacity-70 mb-4">
-        <time datetime={post.data.createdAt.toISOString()}>
-          {formattedDate}
-        </time>
-      </div>
-      {post.data.tags.length > 0 && (
-        <div class="flex gap-2 flex-wrap">
-          {post.data.tags.map((tag) => (
-            <a
-              href={`/tags/${tag}`}
-              class="text-sm px-2 py-1 border border-[var(--color-terminal-accent)] hover:bg-[var(--color-terminal-accent)]/10 transition-colors"
-            >
-              #{tag}
-            </a>
-          ))}
-        </div>
-      )}
-    </header>
+  <div class="post-layout">
+    <aside class="toc-sidebar">
+      <TableOfContents headings={headings} />
+    </aside>
+    <div class="post-main">
+      <article class="post-content">
+        <header class="mb-8">
+          <h1 class="text-4xl font-bold mb-2">{post.data.title}</h1>
+          <div class="text-sm opacity-70 mb-4">
+            <time datetime={post.data.createdAt.toISOString()}>
+              {formattedDate}
+            </time>
+          </div>
+          {post.data.tags.length > 0 && (
+            <div class="flex gap-2 flex-wrap">
+              {post.data.tags.map((tag) => (
+                <a
+                  href={`/tags/${tag}`}
+                  class="text-sm px-2 py-1 border border-[var(--color-terminal-accent)] hover:bg-[var(--color-terminal-accent)]/10 transition-colors"
+                >
+                  #{tag}
+                </a>
+              ))}
+            </div>
+          )}
+        </header>
 
-    <div class="prose prose-invert max-w-none">
-      <Content />
+        <div class="prose prose-invert max-w-none">
+          <Content />
+        </div>
+      </article>
+      <Comments />
     </div>
-  </article>
-  <Comments />
+  </div>
+
+  <script>
+    function initTocHighlight() {
+      const tocLinks = document.querySelectorAll<HTMLAnchorElement>('.toc-link');
+      if (tocLinks.length === 0) return;
+
+      const headingElements = Array.from(tocLinks).map((link) => {
+        const slug = link.dataset.headingSlug;
+        return slug ? document.getElementById(slug) : null;
+      }).filter((el): el is HTMLElement => el !== null);
+
+      if (headingElements.length === 0) return;
+
+      // Smooth scroll on click
+      tocLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const slug = link.dataset.headingSlug;
+          const target = slug ? document.getElementById(slug) : null;
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.pushState(null, '', `#${slug}`);
+          }
+        });
+      });
+
+      // Intersection observer for active state
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              tocLinks.forEach((link) => link.classList.remove('toc-link-active'));
+              const activeLink = document.querySelector(
+                `.toc-link[data-heading-slug="${entry.target.id}"]`
+              );
+              if (activeLink) activeLink.classList.add('toc-link-active');
+            }
+          });
+        },
+        { rootMargin: '0px 0px -80% 0px', threshold: 0 }
+      );
+
+      headingElements.forEach((el) => observer.observe(el));
+    }
+
+    initTocHighlight();
+    document.addEventListener('astro:after-swap', initTocHighlight);
+  </script>
 </BaseLayout>
