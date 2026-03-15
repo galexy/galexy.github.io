@@ -100,6 +100,55 @@ const allItems: TimelineItemData[] = [
 // Sort by date descending
 allItems.sort((a, b) => b.date.getTime() - a.date.getTime());
 
+// Collect featured items (excluding webmarks)
+const featuredItems: TimelineItemData[] = [
+  ...posts.filter((p) => p.data.featured).map((post) => {
+    const { date } = getPostDateAndSlug(post);
+    return {
+      type: 'post' as const,
+      date,
+      url: getPostUrl(post),
+      title: post.data.title,
+      description: post.data.description,
+      tags: post.data.tags,
+      time: formatTime(date),
+    };
+  }),
+  ...snippets.filter((s) => s.data.featured).map((snippet) => {
+    const { date } = getSnippetDateAndSlug(snippet);
+    return {
+      type: 'snippet' as const,
+      date,
+      url: getSnippetUrl(snippet),
+      tags: snippet.data.tags,
+      description: getSnippetPreview(snippet),
+      time: formatTime(date),
+    };
+  }),
+  ...quotations.filter((q) => q.data.featured).map((quotation) => {
+    const { date } = getQuotationDateAndSlug(quotation);
+    return {
+      type: 'quotation' as const,
+      date,
+      url: getQuotationUrl(quotation),
+      description: `"${getQuotationPreview(quotation)}" — ${quotation.data.author}`,
+      tags: quotation.data.tags,
+      time: formatTime(date),
+    };
+  }),
+  ...tils.filter((t) => t.data.featured).map((til) => {
+    const { date } = getTilDateAndSlug(til);
+    return {
+      type: 'til' as const,
+      date,
+      url: getTilUrl(til),
+      description: getTilPreview(til),
+      tags: til.data.tags,
+      time: formatTime(date),
+    };
+  }),
+].sort((a, b) => b.date.getTime() - a.date.getTime());
+
 // Group by date
 const groupedItems = allItems.reduce((groups, item) => {
   const dateStr = item.date.toLocaleDateString('en-US', {
@@ -118,6 +167,26 @@ const groupedItems = allItems.reduce((groups, item) => {
 
 <BaseLayout title="My Blog - Home" description="A terminal-inspired blog with posts, snippets, quotations, TIL, and webmarks">
   <div class="space-y-8">
+    {featuredItems.length > 0 && (
+      <section class="featured-section border border-[var(--color-terminal-accent)]/30 p-6">
+        <h2 class="text-xl font-bold mb-4 text-[var(--color-terminal-accent)] uppercase tracking-wider">
+          ★ Featured
+        </h2>
+        <div class="space-y-2">
+          {featuredItems.map((item) => (
+            <TimelineItem
+              type={item.type}
+              title={item.title}
+              description={item.description}
+              url={item.url}
+              tags={item.tags}
+              time={item.time}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
     <section>
       <h2 class="text-3xl font-bold mb-6 text-[var(--color-terminal-fg)]">
         Recent Activity
