@@ -42,18 +42,18 @@ const formattedDate = date.toLocaleDateString('en-US', {
           href={webmark.data.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="hover:text-[var(--color-terminal-accent)] transition-colors"
+          class="hover:text-accent transition-colors"
         >
           {webmark.data.title} ↗
         </a>
       </h1>
 
       {webmark.data.tags.length > 0 && (
-        <div class="flex gap-2 flex-wrap mb-4">
+        <div class="flex gap-4 flex-wrap mb-4">
           {webmark.data.tags.map((tag) => (
             <a
               href={`/tags/${tag}`}
-              class="text-xs px-2 py-0.5 border border-[var(--color-terminal-accent)]/30 hover:border-[var(--color-terminal-accent)] transition-colors"
+              class="text-sm no-underline text-foreground border-b-2 border-dashed border-foreground hover:text-accent hover:border-accent transition-colors"
             >
               #{tag}
             </a>
@@ -62,7 +62,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
       )}
     </header>
 
-    <div class="prose prose-invert max-w-none">
+    <div class="prose max-w-none">
       <Content />
     </div>
   </article>

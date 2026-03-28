@@ -39,7 +39,7 @@ export default defineConfig({
   },
   markdown: {
     shikiConfig: {
-      theme: 'github-dark',
+      theme: 'min-light',
       wrap: true,
       transformers: [
         transformerNotationDiff(),

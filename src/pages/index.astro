@@ -168,8 +168,8 @@ const groupedItems = allItems.reduce((groups, item) => {
 <BaseLayout title="My Blog - Home" description="A terminal-inspired blog with posts, snippets, quotations, TIL, and webmarks">
   <div class="space-y-8">
     {featuredItems.length > 0 && (
-      <section class="featured-section border border-[var(--color-terminal-accent)]/30 p-6">
-        <h2 class="text-xl font-bold mb-4 text-[var(--color-terminal-accent)] uppercase tracking-wider">
+      <section class="featured-section border border-border rounded p-6">
+        <h2 class="text-xl font-bold mb-4 text-accent uppercase tracking-wider">
           ★ Featured
         </h2>
         <div class="space-y-2">
@@ -188,7 +188,7 @@ const groupedItems = allItems.reduce((groups, item) => {
     )}
 
     <section>
-      <h2 class="text-3xl font-bold mb-6 text-[var(--color-terminal-fg)]">
+      <h2 class="text-3xl font-bold mb-6 text-foreground">
         Recent Activity
       </h2>
 

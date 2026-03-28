@@ -14,6 +14,8 @@ const {
 } = Astro.props;
 
 const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : new URL(Astro.url.pathname, `http://localhost:4321`);
+
+const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -49,59 +51,71 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : new 
     <!-- Google Tag Manager -->
     <GoogleTagManager />
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-svh flex flex-col">
     <!-- Google Tag Manager (noscript) -->
     <GoogleTagManagerNoScript />
 
-    <header class="border-b border-[var(--color-terminal-fg)]/20 py-4">
-      <div class="max-w-4xl mx-auto px-4">
-        <nav class="flex items-center justify-between">
-          <a href="/" class="text-[var(--color-terminal-accent)] hover:text-[var(--color-terminal-fg)] transition-colors font-bold text-xl">
-            ~/blog
-          </a>
-          <ul class="flex gap-6 items-center">
+    <header class="border-b border-border py-4 sm:py-6">
+      <div class="max-w-4xl mx-auto w-full px-4 flex flex-col items-center justify-between sm:flex-row">
+        <a href="/" class="text-xl font-semibold sm:text-2xl text-foreground hover:text-accent transition-colors no-underline">
+          flatMap.io
+        </a>
+
+        <button
+          id="menu-toggle"
+          class="sm:hidden absolute right-4 top-4 border-border p-1"
+          aria-label="Toggle navigation"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            <path id="menu-icon-close" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" class="hidden" />
+          </svg>
+        </button>
+
+        <nav id="nav-menu" class="hidden sm:block mt-4 sm:mt-0">
+          <ul class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center font-medium">
             <li>
-              <a href="/" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/" class={`transition-colors no-underline hover:text-accent ${currentPath === '/' ? 'underline decoration-wavy decoration-2 underline-offset-8 text-accent' : 'text-foreground'}`}>
                 home
               </a>
             </li>
             <li>
-              <a href="/posts" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/posts" class={`transition-colors no-underline hover:text-accent ${currentPath.startsWith('/posts') ? 'underline decoration-wavy decoration-2 underline-offset-8 text-accent' : 'text-foreground'}`}>
                 posts
               </a>
             </li>
             <li>
-              <a href="/snippets" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/snippets" class={`transition-colors no-underline hover:text-accent ${currentPath.startsWith('/snippets') ? 'underline decoration-wavy decoration-2 underline-offset-8 text-accent' : 'text-foreground'}`}>
                 snippets
               </a>
             </li>
             <li>
-              <a href="/quotations" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/quotations" class={`transition-colors no-underline hover:text-accent ${currentPath.startsWith('/quotations') ? 'underline decoration-wavy decoration-2 underline-offset-8 text-accent' : 'text-foreground'}`}>
                 quotations
               </a>
             </li>
             <li>
-              <a href="/til" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/til" class={`transition-colors no-underline hover:text-accent ${currentPath.startsWith('/til') ? 'underline decoration-wavy decoration-2 underline-offset-8 text-accent' : 'text-foreground'}`}>
                 til
               </a>
             </li>
             <li>
-              <a href="/webmarks" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/webmarks" class={`transition-colors no-underline hover:text-accent ${currentPath.startsWith('/webmarks') ? 'underline decoration-wavy decoration-2 underline-offset-8 text-accent' : 'text-foreground'}`}>
                 webmarks
               </a>
             </li>
             <li>
-              <a href="/tags" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/tags" class={`transition-colors no-underline hover:text-accent ${currentPath.startsWith('/tags') ? 'underline decoration-wavy decoration-2 underline-offset-8 text-accent' : 'text-foreground'}`}>
                 tags
               </a>
             </li>
             <li>
-              <a href="/about" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/about" class={`transition-colors no-underline hover:text-accent ${currentPath === '/about' ? 'underline decoration-wavy decoration-2 underline-offset-8 text-accent' : 'text-foreground'}`}>
                 about
               </a>
             </li>
             <li>
-              <a href="/rss.xml" class="hover:text-[var(--color-terminal-accent)] transition-colors">
+              <a href="/rss.xml" class="transition-colors no-underline text-foreground hover:text-accent">
                 rss
               </a>
             </li>
@@ -114,12 +128,24 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : new 
       <slot />
     </main>
 
-    <footer class="border-t border-[var(--color-terminal-fg)]/20 py-6 mt-8">
-      <div class="max-w-4xl mx-auto px-4 text-center text-sm opacity-70">
-        <p>© {new Date().getFullYear()} My Blog. Built with Astro.</p>
+    <footer class="border-t border-border py-6 sm:py-4 mt-auto">
+      <div class="max-w-4xl mx-auto w-full px-4 text-center text-sm opacity-70">
+        <p>&copy; {new Date().getFullYear()} flatMap.io. Built with Astro.</p>
       </div>
     </footer>
 
     <script src="/src/scripts/code-blocks.js"></script>
+    <script is:inline>
+      const menuToggle = document.getElementById('menu-toggle');
+      const navMenu = document.getElementById('nav-menu');
+      const iconOpen = document.getElementById('menu-icon-open');
+      const iconClose = document.getElementById('menu-icon-close');
+
+      menuToggle?.addEventListener('click', () => {
+        navMenu?.classList.toggle('hidden');
+        iconOpen?.classList.toggle('hidden');
+        iconClose?.classList.toggle('hidden');
+      });
+    </script>
   </body>
 </html>

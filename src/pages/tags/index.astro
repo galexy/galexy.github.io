@@ -47,7 +47,7 @@ const sortedTags = Object.entries(tagCounts).sort(([a], [b]) => a.localeCompare(
 
 <BaseLayout title="Tags" description="Browse content by tag">
   <div class="mb-8">
-    <h1 class="text-4xl font-bold mb-2 text-[var(--color-terminal-accent)]">
+    <h1 class="text-4xl font-bold mb-2 text-accent">
       Tags
     </h1>
     <p class="opacity-75">
@@ -57,10 +57,10 @@ const sortedTags = Object.entries(tagCounts).sort(([a], [b]) => a.localeCompare(
 
   <div class="space-y-4">
     {sortedTags.map(([tag, count]) => (
-      <div class="border-l-2 border-[var(--color-terminal-fg)]/20 pl-4 py-2 hover:border-[var(--color-terminal-accent)]/50 transition-colors">
+      <div class="border-l-2 border-border pl-4 py-2 hover:border-accent transition-colors">
         <a
           href={`/tags/${tag}`}
-          class="flex items-baseline gap-3 hover:text-[var(--color-terminal-accent)] transition-colors"
+          class="flex items-baseline gap-3 no-underline text-foreground hover:text-accent transition-colors"
         >
           <span class="text-2xl font-bold">#{tag}</span>
           <span class="text-sm opacity-70">

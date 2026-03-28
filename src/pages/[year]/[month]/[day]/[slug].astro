@@ -44,18 +44,18 @@ const formattedDate = date.toLocaleDateString('en-US', {
 <BaseLayout title={post.data.title} description={post.data.description}>
   <article class="post-content">
     <header class="mb-8">
-      <h1 class="text-4xl font-bold mb-2">{post.data.title}</h1>
-      <div class="text-sm opacity-70 mb-4">
+      <h1 class="text-2xl font-bold text-accent sm:text-3xl">{post.data.title}</h1>
+      <div class="text-sm opacity-80 mb-4">
         <time datetime={post.data.createdAt.toISOString()}>
           {formattedDate}
         </time>
       </div>
       {post.data.tags.length > 0 && (
-        <div class="flex gap-2 flex-wrap">
+        <div class="flex gap-4 flex-wrap">
           {post.data.tags.map((tag) => (
             <a
               href={`/tags/${tag}`}
-              class="text-sm px-2 py-1 border border-[var(--color-terminal-accent)] hover:bg-[var(--color-terminal-accent)]/10 transition-colors"
+              class="text-sm no-underline text-foreground border-b-2 border-dashed border-foreground hover:text-accent hover:border-accent transition-colors"
             >
               #{tag}
             </a>
@@ -64,7 +64,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
       )}
     </header>
 
-    <div class="prose prose-invert max-w-none">
+    <div class="prose max-w-none">
       <Content />
     </div>
   </article>

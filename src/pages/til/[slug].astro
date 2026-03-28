@@ -39,11 +39,11 @@ const formattedDate = date.toLocaleDateString('en-US', {
     </div>
 
     {til.data.tags.length > 0 && (
-      <div class="flex gap-2 flex-wrap mb-6">
+      <div class="flex gap-4 flex-wrap mb-6">
         {til.data.tags.map((tag) => (
           <a
             href={`/tags/${tag}`}
-            class="text-xs px-2 py-1 border border-[var(--color-terminal-accent)]/30 hover:border-[var(--color-terminal-accent)] transition-colors"
+            class="text-sm no-underline text-foreground border-b-2 border-dashed border-foreground hover:text-accent hover:border-accent transition-colors"
           >
             #{tag}
           </a>
@@ -51,7 +51,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
       </div>
     )}
 
-    <div class="prose prose-invert max-w-none">
+    <div class="prose max-w-none">
       <Content />
     </div>
   </article>

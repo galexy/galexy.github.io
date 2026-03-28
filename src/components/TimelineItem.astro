@@ -21,7 +21,7 @@ const typeLabels = {
 const typeLabel = typeLabels[type];
 ---
 
-<article class="timeline-item border-l-2 border-[var(--color-terminal-fg)]/20 pl-4 py-2 hover:border-[var(--color-terminal-accent)]/50 transition-colors">
+<article class="timeline-item border-l-2 border-border pl-4 py-2 hover:border-accent transition-colors">
   <div class="text-xs opacity-50 mb-1 uppercase font-bold tracking-wider flex items-center gap-2">
     <span>{typeLabel}</span>
     {time && <span class="normal-case font-normal">@ {time}</span>}
@@ -33,7 +33,7 @@ const typeLabel = typeLabels[type];
         href={url}
         target="_blank"
         rel="noopener noreferrer"
-        class="font-bold hover:text-[var(--color-terminal-accent)] transition-colors"
+        class="font-bold text-accent decoration-dashed hover:underline no-underline"
       >
         {title} ↗
       </a>{' '}
@@ -42,10 +42,10 @@ const typeLabel = typeLabels[type];
   )}
 
   {type !== 'webmark' && title && (
-    <h3 class="text-lg font-bold mb-1">
+    <h3 class="text-lg font-medium mb-1 not-italic">
       <a
         href={url}
-        class="hover:text-[var(--color-terminal-accent)] transition-colors"
+        class="text-accent decoration-dashed underline-offset-4 no-underline hover:underline"
       >
         {title}
       </a>
@@ -56,7 +56,7 @@ const typeLabel = typeLabels[type];
     <p class="opacity-90 text-sm mb-2">
       <a
         href={url}
-        class="hover:text-[var(--color-terminal-accent)] transition-colors"
+        class="text-foreground decoration-dashed hover:text-accent"
       >
         {description}
       </a>
@@ -74,7 +74,7 @@ const typeLabel = typeLabels[type];
       {tags.map((tag) => (
         <a
           href={`/tags/${tag}`}
-          class="text-xs px-2 py-0.5 border border-[var(--color-terminal-accent)]/30 hover:border-[var(--color-terminal-accent)] transition-colors"
+          class="text-xs no-underline text-foreground border-b-2 border-dashed border-foreground hover:text-accent hover:border-accent transition-colors"
         >
           #{tag}
         </a>
