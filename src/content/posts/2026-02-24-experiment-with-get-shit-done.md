@@ -6,6 +6,7 @@ tags:
   - Claude Code
   - coding-agent
 draft: false
+featured: true
 ---
 
 At the start of the year, I realized that engineering coding agents is becoming more important than programming
@@ -76,11 +77,9 @@ window.
 2. **Plan** (`/gsd:plan-phase`) — Spawns a research subagent to study the codebase and web for
    relevant patterns, then a planning subagent that generates individual plan files with objectives
    and tasks. Tasks can be `auto` (self-contained), `tdd`, or `checkpoint:human-verify`.
-
 3. **Execute** (`/gsd:execute-phase`) — Spawns parallel subagents for each plan within a wave,
    working through waves sequentially. Each task is committed as it completes. Output: `SUMMARY.md`
    per plan, recording accomplishments, decisions, deviations, and issues.
-
 4. **Verify** (`/gsd:verify-phase`) — Generates UAT tests from the summaries and walks you through
    them one by one. You report pass/fail; issues are recorded in `UAT.md`. Gaps can theoretically
    be addressed by re-planning or inserting a new phase, though the documentation wasn't clear on
@@ -149,8 +148,8 @@ overall product feature? And, how do we best implement this conceptual model at 
 
 An example of this separation can be seen in every relational database. _Tables_, _Indexes_, etc. are concepts modeled
 to communicate to the user. Under the hood, these are implemented in a variety of different ways that may or may not
-closely resemble what the user sees. Both views need to be explored. In the plans that were generated, **too many
-tokens were wasted** on generating what code would have been written. These plans are _detailed_ operational step by
+closely resemble what the user sees. Both views need to be explored. In the plans that were generated, **too many**
+**tokens were wasted** on generating what code would have been written. These plans are _detailed_ operational step by
 step plans — but they never forced thinking about the domain model itself.
 
 I learned this at [phase 3 of my experiment](https://github.com/galexy/revivo-mk1/tree/main/.planning/phases/03-transaction-domain)
