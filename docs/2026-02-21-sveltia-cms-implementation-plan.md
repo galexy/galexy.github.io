@@ -2,7 +2,7 @@
 
 ## Context
 
-flatmap.io content is currently created by manually editing Markdown files through the GitHub web UI. Phase 1 of the design doc (`docs/design-blog-creation-ui.md`) calls for adding Sveltia CMS at `/admin/` to provide a rich editing UI with front matter auto-generation, image upload, and markdown editing for all 5 content collections.
+trace.reasoning.net content is currently created by manually editing Markdown files through the GitHub web UI. Phase 1 of the design doc (`docs/design-blog-creation-ui.md`) calls for adding Sveltia CMS at `/admin/` to provide a rich editing UI with front matter auto-generation, image upload, and markdown editing for all 5 content collections.
 
 The site is fully static (Astro 5.x on GitHub Pages). Sveltia CMS runs entirely in the browser - it loads from a CDN, reads/writes directly to GitHub via API, and needs no server component. Auth is via a GitHub Personal Access Token.
 
@@ -41,7 +41,7 @@ Minimal HTML that loads Sveltia CMS from the unpkg CDN:
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>Content Manager - flatmap.io</title>
+  <title>Content Manager - trace.reasoning.net</title>
 </head>
 <body>
   <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>

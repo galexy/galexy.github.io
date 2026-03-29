@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Personal blog for Galex Yen at https://flatmap.io, built with Astro 5, Tailwind CSS 4, and TypeScript (strict mode). Deployed to GitHub Pages from the `source` branch via GitHub Actions.
+Personal blog for Galex Yen at https://trace.reasoning.net, built with Astro 5, Tailwind CSS 4, and TypeScript (strict mode). Deployed to GitHub Pages from the `source` branch via GitHub Actions.
 
 ## Commands
 

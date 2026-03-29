@@ -1,8 +1,8 @@
-# robots.txt for flatmap.io
+# robots.txt for trace.reasoning.net
 # Allow all crawlers to index all content
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://flatmap.io/sitemap-index.xml
+Sitemap: https://trace.reasoning.net/sitemap-index.xml

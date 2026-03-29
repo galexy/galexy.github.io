@@ -1,8 +1,8 @@
-# Design Document: Blog Post Creation UI for flatmap.io
+# Design Document: Blog Post Creation UI for trace.reasoning.net
 
 ## Problem Statement
 
-Currently, all content on flatmap.io is created by manually editing Markdown files through the GitHub web UI. This involves:
+Currently, all content on trace.reasoning.net is created by manually editing Markdown files through the GitHub web UI. This involves:
 
 - Manually writing YAML front matter for each content type (posts, snippets, quotations, TIL, webmarks)
 - Uploading images to `public/images/` through separate commits
@@ -27,7 +27,7 @@ Currently, all content on flatmap.io is created by manually editing Markdown fil
 | Images | Static files in `public/images/`, Obsidian-style sizing syntax |
 | Deployment | GitHub Actions on push to `source` branch → GitHub Pages |
 | Custom plugins | `rehype-obsidian-images` (sizing/alignment), `rehype-youtube-embed` |
-| Site URL | https://flatmap.io |
+| Site URL | https://trace.reasoning.net |
 
 ### Content Collection Schemas
 
@@ -210,7 +210,7 @@ A two-pronged approach that addresses both goals:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        flatmap.io                               │
+│                        trace.reasoning.net                               │
 │                                                                 │
 │  /admin/  (Sveltia CMS)         /capture/  (Quick Capture)     │
 │  ┌───────────────────────┐      ┌───────────────────────┐      │
@@ -283,7 +283,7 @@ Create `public/admin/index.html` that loads Sveltia CMS:
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
-  <title>Content Manager — flatmap.io</title>
+  <title>Content Manager — trace.reasoning.net</title>
 </head>
 <body>
   <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
@@ -438,7 +438,7 @@ Two bookmarklets for the browser bookmark bar:
 
 ```javascript
 javascript:void(open(
-  'https://flatmap.io/capture/?mode=webmark'
+  'https://trace.reasoning.net/capture/?mode=webmark'
   + '&url=' + encodeURIComponent(location.href)
   + '&title=' + encodeURIComponent(document.title),
   '_blank'
@@ -449,7 +449,7 @@ javascript:void(open(
 
 ```javascript
 javascript:void(open(
-  'https://flatmap.io/capture/?mode=quotation'
+  'https://trace.reasoning.net/capture/?mode=quotation'
   + '&url=' + encodeURIComponent(location.href)
   + '&title=' + encodeURIComponent(document.title)
   + '&text=' + encodeURIComponent(getSelection().toString()),
@@ -482,7 +482,7 @@ javascript:void(open(
 
 **Security considerations:**
 - Fine-grained PAT is scoped to a single repo with minimal permissions
-- `localStorage` is same-origin only — only pages on `flatmap.io` can read it
+- `localStorage` is same-origin only — only pages on `trace.reasoning.net` can read it
 - Site is served over HTTPS (GitHub Pages enforces this)
 - Token can be revoked instantly from GitHub settings
 - Acceptable risk profile for a single-author personal blog

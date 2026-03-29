@@ -16,8 +16,8 @@ export async function GET(context: APIContext) {
     .sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
 
   return rss({
-    title: 'flatMap.io blog - Posts',
-    description: 'Blog posts from flatMap.io',
+    title: 'trace.reasoning.net blog - Posts',
+    description: 'Blog posts from trace.reasoning.net',
     site: context.site!,
     items,
   });

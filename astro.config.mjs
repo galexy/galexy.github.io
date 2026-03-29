@@ -32,7 +32,7 @@ function transformerMetaTitle() {
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://flatmap.io',
+  site: 'https://trace.reasoning.net',
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()]
