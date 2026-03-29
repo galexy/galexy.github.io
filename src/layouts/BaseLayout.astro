@@ -9,7 +9,7 @@ interface Props {
 }
 
 const {
-  title = 'trace.reasoning.net blog',
+  title = 'reasoning trace',
   description = 'Learning in public'
 } = Astro.props;
 
@@ -43,7 +43,7 @@ const currentPath = Astro.url.pathname;
     <meta property="twitter:description" content={description} />
 
     <!-- RSS -->
-    <link rel="alternate" type="application/rss+xml" title="trace.reasoning.net blog" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title="reasoning trace" href="/rss.xml" />
 
     <!-- KaTeX for math rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
@@ -58,7 +58,7 @@ const currentPath = Astro.url.pathname;
     <header class="border-b border-border py-4 sm:py-6">
       <div class="max-w-4xl mx-auto w-full px-4 flex flex-col items-center justify-between sm:flex-row">
         <a href="/" class="text-xl font-semibold sm:text-2xl text-foreground hover:text-accent transition-colors no-underline">
-          trace.reasoning.net
+          reasoning trace
         </a>
 
         <button
@@ -130,7 +130,7 @@ const currentPath = Astro.url.pathname;
 
     <footer class="border-t border-border py-6 sm:py-4 mt-auto">
       <div class="max-w-4xl mx-auto w-full px-4 text-center text-sm opacity-70">
-        <p>&copy; {new Date().getFullYear()} trace.reasoning.net. Built with Astro.</p>
+        <p>&copy; {new Date().getFullYear()} Galex Yen. Built with Astro.</p>
       </div>
     </footer>
 

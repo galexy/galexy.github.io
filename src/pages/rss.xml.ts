@@ -48,7 +48,7 @@ export async function GET(context: APIContext) {
   ].sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
 
   return rss({
-    title: 'trace.reasoning.net blog',
+    title: 'reasoning trace',
     description: 'Learning in public',
     site: context.site!,
     items,
