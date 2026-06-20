@@ -19,7 +19,7 @@
     "@microflash/remark-figure-caption": "^2.0.2",
     "@shikijs/transformers": "^4.0.2",
     "@tailwindcss/vite": "^4.1.18",
-    "astro": "^5.18.1",
+    "astro": "^6.4.6",
     "rehype-katex": "^7.0.1",
     "remark-collapse": "^0.1.2",
     "remark-math": "^6.0.0",
